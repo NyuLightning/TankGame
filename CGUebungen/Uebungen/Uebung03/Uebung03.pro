@@ -11,12 +11,16 @@ SOURCES += \
     bodypart.cpp \
     arm.cpp \
     myscene.cpp \
-    Tank.cpp \
-    World.cpp
+    world.cpp \
+    body.cpp \
+    pipe.cpp \
+    tower.cpp
 
 FORMS += \
     robot.ui
 
 HEADERS += \
-    Tank.h \
-    World.h
+    world.h \
+    body.h \
+    pipe.h \
+    tower.h
