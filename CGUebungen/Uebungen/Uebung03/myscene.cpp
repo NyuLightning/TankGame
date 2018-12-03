@@ -18,10 +18,10 @@
 #include "texture.h"
 #include "shader.h"
 #include "listener.h"
-#include "audioengine.h"
-#include "soundsource.h"
-#include "shadermanager.h"
-#include "efx-presets.h"
+//#include "audioengine.h"
+//#include "soundsource.h"
+//#include "shadermanager.h"
+//#include "efx-presets.h"
 
 
 #include "body.h"
@@ -82,13 +82,16 @@ void SceneManager::initScenes()
 Node* initScene1()
 {
     //Objekte anlegen
-    QString path(SRCDIR); //aus .pro-File!          soll als Pfadstring dienen, kp was der mit dem SRCDIR will und warum das falsch ist
+    QString path(SRCDIR); //aus .pro-File, soll als Pfadstring dienen, kp was der mit dem SRCDIR will und warum das falsch ist; FUNKTIONIERT AUF HOCHSCHUL PC??
 
+
+
+    rot = new UITransformation(); // ?
+    KeyboardTransformation* schieb = new KeyboardTransformation; // ?
+    Node* schiebNode = new Node(schieb); // ?
+    Node* rotNode = new Node(rot); // ?
 
     /*
-    rot = new UITransformation();
-    KeyboardTransformation* schieb = new KeyboardTransformation;
-
     //    Objekte anlegen
     KeyboardTransformation* schieb = new KeyboardTransformation;
     BodyPart* torso = new BodyPart(4.0f, 8.0f, 4.0f);
@@ -116,13 +119,13 @@ Node* initScene1()
 
 
 
-    // Panzerteile erzeugen - ICH WEISS NOCH NICHT OB ICH DAS IN EINZELNE KLASSEN PACKEN WILL ODER ALLE DREI IN EINEM HIER DRIN (?)
-    Body *theBody = new Body();
-    Tower *theTower = new Tower();
-    Pipe *thePipe = new Pipe();
-    Geometry* gTower = new TriangleMesh(path + QString("/Models/tower.obj"));
-    Geometry* gBody = new TriangleMesh(path + QString("/Models/body.obj"));
-    Geometry* gPipe = new TriangleMesh(path + QString("/Models/pipe.obj"));
+    // Panzerteile erzeugen - alles hier drin oder in einzelnen Klassen (?)
+   // Body *theBody = new Body();
+   // Tower *theTower = new Tower();
+   // Pipe *thePipe = new Pipe();
+    Geometry* gTower = new TriangleMesh(path + QString("/../Models/tower.obj"));
+    Geometry* gBody = new TriangleMesh(path + QString("/../Models/body.obj"));
+    Geometry* gPipe = new TriangleMesh(path + QString("/../Models/pipe.obj"));
 
     Drawable* dTower = new Drawable(gTower);
     Drawable* dBody = new Drawable(gBody);
@@ -134,15 +137,16 @@ Node* initScene1()
     Transformation *posBody = new Transformation();
     Transformation *posPipe = new Transformation();
 
+
     // Texturen laden
     t = dTower->getProperty<Texture>();
-    t->loadPicture(path + QString("/PFAD EINFÜGEN/"));
+    t->loadPicture(path + QString("/PFAD/"));
 
     t = dBody->getProperty<Texture>();
-    t->loadPicture(path + QString("/PFAD EINFÜGEN/"));
+    t->loadPicture(path + QString("/PFAD/"));
 
     t = dPipe->getProperty<Texture>();
-    t->loadPicture(path + QString("/PFAD EINFÜGEN/"));
+    t->loadPicture(path + QString("/PFAD/"));
 
     // Shader laden
     /* ... */
@@ -160,18 +164,17 @@ Node* initScene1()
 
     Node *root = new Node(); // Ausgangsnode
 
-    // Teile auf Anfangsposition bringen - bis jetzt noch mehr oder weniger Random-Werte
+    // Teile auf Anfangsposition bringen
     posTower->translate(0.0, 0.0, 1.0);
-    posBody->translate(2.0, 0.0, 3.0);
-    posPipe->translate(0.0, 0.33, 0.0);
+    posBody->translate(0.0, 0.0, 0.0);
+    posPipe->translate(0.0, 0.0, 0.0);
 
-    // Sah irgendwie wichtig aus? :(
+    //
     KeyboardTransformation *lKB = new KeyboardTransformation();
     Node *lKBNode = new Node(lKB);
     lKB->setTransKeys('l','L',
                       KeyboardTransformation::NoKey, KeyboardTransformation::NoKey,
                       KeyboardTransformation::NoKey, KeyboardTransformation::NoKey);
-
 
 
     // Baum aufbauen
@@ -186,10 +189,14 @@ Node* initScene1()
     posTowerNode->addChild(dPipeNode);
     posTowerNode->addChild(posPipeNode);
 
-    // irgendwie kommt hier noch die lKBNode rein, schaut euch am besten da das Vorlesungbeispiel auf Moodle an, da hängt man eigentlich die nächsten Teile dran und sowas
+
+    // irgendwie kommt hier noch die lKBNode rein, schaut euch am besten da das Vorlesungbeispiel (zu einfügen von Meshes, SOund, Shader) auf Moodle an, da hängt man eigentlich die nächsten Teile dran und sowas
 
 
 
+
+    schieb->setTransKeysUpper('e', 'r', 't'); // ?
+    schiebNode->addChild(rotNode); // ?
 /*
     // Keys
     // Loesung fuer Verschieben über KeyboardTransformation
