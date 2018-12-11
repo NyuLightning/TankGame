@@ -23,6 +23,8 @@
 //#include "shadermanager.h"
 //#include "efx-presets.h"
 
+#include "inputregistry.h"
+
 
 #include "body.h"
 #include "tower.h"
@@ -31,16 +33,10 @@
 #include "world.h"
 #include "trianglemesh.h"
 
+#include "bodypart.h"
+#include "listener.h"
 
-/*
- * UNSERE KLASSEN:
- *
- * body
- * pipe
- * tower
- * world
- *
- */
+#include "idleobserver.h"
 
 Node* initScene1();
 UITransformation* rot;
@@ -82,16 +78,16 @@ void SceneManager::initScenes()
 Node* initScene1()
 {
     //Objekte anlegen
-    QString path(SRCDIR); //aus .pro-File, soll als Pfadstring dienen, kp was der mit dem SRCDIR will und warum das falsch ist; FUNKTIONIERT AUF HOCHSCHUL PC??
+    QString path(SRCDIR); //aus .pro-File!
 
 
 
-    rot = new UITransformation(); // ?
-    KeyboardTransformation* schieb = new KeyboardTransformation; // ?
-    Node* schiebNode = new Node(schieb); // ?
-    Node* rotNode = new Node(rot); // ?
+    rot = new UITransformation();
+    KeyboardTransformation* schieb = new KeyboardTransformation;
+    Node* schiebNode = new Node(schieb);
+    Node* rotNode = new Node(rot);
 
-    /*
+/*
     //    Objekte anlegen
     KeyboardTransformation* schieb = new KeyboardTransformation;
     BodyPart* torso = new BodyPart(4.0f, 8.0f, 4.0f);
@@ -103,26 +99,12 @@ Node* initScene1()
     BodyPart* bein = new BodyPart(1.5f, 2.0f, 1.5f);
     BodyPart* fuss = new BodyPart(3.0f, 0.2f, 3.0f);
     Color* c;
-
-    // Nodes anlegen
-    Node* rotNode = new Node(rot);
-    Node* schiebNode = new Node(schieb);
-    Node* torsoNode = new Node(torso);
-    Node* belmesNode = new Node(belmes);
-    Node* lArmNode = new Node(lArm);
-    Node* rArmNode = new Node(rArm);
-    Node* lFingerNode = new Node(lFinger);
-    Node* rFingerNode = new Node(rFinger);
-    Node* beinNode = new Node(bein);
-    Node* fussNode = new Node(fuss);
-    */
+*/
 
 
 
-    // Panzerteile erzeugen - alles hier drin oder in einzelnen Klassen (?)
-   // Body *theBody = new Body();
-   // Tower *theTower = new Tower();
-   // Pipe *thePipe = new Pipe();
+    // Panzerteile erzeugen
+
     Geometry* gTower = new TriangleMesh(path + QString("/../Models/tower.obj"));
     Geometry* gBody = new TriangleMesh(path + QString("/../Models/body.obj"));
     Geometry* gPipe = new TriangleMesh(path + QString("/../Models/pipe.obj"));
@@ -139,14 +121,15 @@ Node* initScene1()
 
 
     // Texturen laden
+
     t = dTower->getProperty<Texture>();
-    t->loadPicture(path + QString("/PFAD/"));
+    t->loadPicture(path + QString("/../Textures/Unbekannt.png"));
 
     t = dBody->getProperty<Texture>();
-    t->loadPicture(path + QString("/PFAD/"));
+    t->loadPicture(path + QString("/../Textures/Unbekannt2.png"));
 
     t = dPipe->getProperty<Texture>();
-    t->loadPicture(path + QString("/PFAD/"));
+    t->loadPicture(path + QString("/../Textures/Unbekannt3.png/"));
 
     // Shader laden
     /* ... */
@@ -164,39 +147,96 @@ Node* initScene1()
 
     Node *root = new Node(); // Ausgangsnode
 
-    // Teile auf Anfangsposition bringen
-    posTower->translate(0.0, 0.0, 1.0);
-    posBody->translate(0.0, 0.0, 0.0);
-    posPipe->translate(0.0, 0.0, 0.0);
+    // Teile auf Anfangsposition bringen - ggf ohne f - das waren die Werte aus Blender (Origin der Objekte)
+    posTower->translate(-0.009708f, 1.69441f, 2.96733f);
+    posBody->translate(-0.005249f, 0.596072f, 1.01008f);
+    posPipe->translate(0.000068f, -0.389403f, 2.90485f); // Origin gesetzt auf hinteres Ende des Rohrs, nicht Mittelpunkt des Objekts
 
-    //
-    KeyboardTransformation *lKB = new KeyboardTransformation();
-    Node *lKBNode = new Node(lKB);
-    lKB->setTransKeys('l','L',
-                      KeyboardTransformation::NoKey, KeyboardTransformation::NoKey,
-                      KeyboardTransformation::NoKey, KeyboardTransformation::NoKey);
+    // Transformationen - in Zukunft mit sinnvollen Keys belegen!
+    KeyboardTransformation* bodyRotation = new KeyboardTransformation();
+    KeyboardTransformation* towerRotation = new KeyboardTransformation();
+    KeyboardTransformation* pipeRotation = new KeyboardTransformation();
+    bodyRotation->setRotKeys(KeyboardTransformation::NoKey,
+                             KeyboardTransformation::NoKey,
+                             'q', 'Q',
+                             KeyboardTransformation::NoKey,
+                             KeyboardTransformation::NoKey);
+    towerRotation->setRotKeys(KeyboardTransformation::NoKey,
+                              KeyboardTransformation::NoKey,
+                              'v', 'V',
+                              KeyboardTransformation::NoKey,
+                              KeyboardTransformation::NoKey);
+    pipeRotation->setRotKeys('h', 'H',
+                             KeyboardTransformation::NoKey,
+                             KeyboardTransformation::NoKey,
+
+                             KeyboardTransformation::NoKey,
+                             KeyboardTransformation::NoKey
+                           );
+
+
+
+    // Rotations mit Translation-Test
+
+    KeyboardInput* keyIn = InputRegistry::getInstance().getKeyboardInput();
+
+    Transformation* trafo = new KeyboardTransformation();
+    int lMyKey = true? 'i':'c';
+
+    if (true)
+    {
+        // Hochschieben, um an der Schulter und nicht am Mittelpunkt zu drehen
+        trafo->translate(0.0, -1.6 , 0.0);
+        trafo->rotate(50.0, 1.0, 0.0, 0.0);
+        // Danach wieder runterschieben
+        trafo->translate(0.0, 1.6 , 0.0);
+     }
+//    if (keyIn->isKeyPressed(toupper(lMyKey)))
+//    {
+//        trafo.translate(0.0, this->getY() / 2, 0.0);
+//        trafo.rotate(-5.0, 1.0, 0.0, 0.0);
+//        trafo.translate(0.0, -this->getY() / 2, 0.0);
+//    }
+
+
+    // Geschwindigkeit mit der rotiert wird
+    //pipeRotation->setRotspeed(3.0)
+
+
+    // Transformationsnodes
+
+    Node* bodyRotationNode = new Node(bodyRotation);
+    Node* towerRotationNode = new Node(towerRotation);
+    Node* pipeRotationNode = new Node(trafo);
+
+
+
+    // aktuell unnötig, gibt Orientierungn bei Initialisierung an
+
+    //bodyRotation->rotate(0.0,0.0,0.0,0.0);
+    //towerRotation->rotate(0.0,0.0,0.0,0.0);
+    //pipeRotation->rotate(0.0,0.0,0.0,0.0);
+
 
 
     // Baum aufbauen
-    root->addChild(lKBNode); //??
 
-    root->addChild(dBodyNode);
-    root->addChild(posBodyNode);
+    root->addChild(bodyRotationNode);
+    bodyRotationNode->addChild(dBodyNode);
+    bodyRotationNode->addChild(posBodyNode);
 
-    posBodyNode->addChild(dTowerNode);
-    posBodyNode->addChild(posTowerNode);
+    posBodyNode->addChild(towerRotationNode);
+    towerRotationNode->addChild(dTowerNode);
+    towerRotationNode->addChild(posTowerNode);
 
-    posTowerNode->addChild(dPipeNode);
-    posTowerNode->addChild(posPipeNode);
+    posTowerNode->addChild(pipeRotationNode);
+    pipeRotationNode->addChild(dPipeNode);
+    pipeRotationNode->addChild(posPipeNode);
 
+    // Sinn?
+    schieb->setTransKeysUpper('e', 'r', 't');
+    schiebNode->addChild(rotNode);
 
-    // irgendwie kommt hier noch die lKBNode rein, schaut euch am besten da das Vorlesungbeispiel (zu einfügen von Meshes, SOund, Shader) auf Moodle an, da hängt man eigentlich die nächsten Teile dran und sowas
-
-
-
-
-    schieb->setTransKeysUpper('e', 'r', 't'); // ?
-    schiebNode->addChild(rotNode); // ?
 /*
     // Keys
     // Loesung fuer Verschieben über KeyboardTransformation

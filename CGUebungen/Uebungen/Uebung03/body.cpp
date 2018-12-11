@@ -7,6 +7,9 @@
 
 Body::Body()
 {
+    QString path(SRCDIR);
+    Geometry* gBody = new TriangleMesh(path + QString("/../Models/body.obj"));
+    Drawable* dBody = new Drawable(gBody);
 
 }
 
