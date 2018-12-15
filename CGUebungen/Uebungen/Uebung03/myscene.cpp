@@ -122,7 +122,6 @@ Node* initScene1()
     Transformation *posBody = new Transformation();
     Transformation *posPipe = new Transformation();
 
-
     // Texturen laden
 
     t = dTower->getProperty<Texture>();
@@ -150,10 +149,10 @@ Node* initScene1()
 
     Node *root = new Node(); // Ausgangsnode
 
-    // Teile auf Anfangsposition bringen - ggf ohne f - das waren die Werte aus Blender (Origin der Objekte)
-    //posTower->translate(-0.009708f, 1.69441f, 2.96733f);
-    //posBody->translate(-0.005249f, 0.596072f, 1.01008f);
-    //posPipe->translate(0.000068f, -0.389403f, 2.90485f); // Origin gesetzt auf hinteres Ende des Rohrs, nicht Mittelpunkt des Objekts
+    // Teile auf Anfangsposition bringen
+    //posTower->translate(0, 200, 0);
+    posBody->translate(-0.005249f, 0.596072f, 1.01008f);
+    posPipe->translate(0.000068f, -0.389403f, 2.90485f); // Origin gesetzt auf hinteres Ende des Rohrs, nicht Mittelpunkt des Objekts
 
     // Transformationen - in Zukunft mit sinnvollen Keys belegen!
     KeyboardTransformation* bodyRotation = new KeyboardTransformation();
@@ -175,11 +174,9 @@ Node* initScene1()
 
 //                             KeyboardTransformation::NoKey,
 //                             KeyboardTransformation::NoKey
-//                           );
+//                          );
 
 
-
-    Transformation* trafo = new KeyboardTransformation();
     GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation);
     loop->doIt();
 
@@ -188,7 +185,7 @@ Node* initScene1()
 
     Node* bodyRotationNode = new Node(bodyRotation);
     Node* towerRotationNode = new Node(towerRotation);
-    Node* pipeRotationNode = new Node(trafo);
+    Node* pipeRotationNode = new Node(pipeRotation);
 
 
 
@@ -203,20 +200,23 @@ Node* initScene1()
     // Baum aufbauen
 
     root->addChild(bodyRotationNode);
-    bodyRotationNode->addChild(dBodyNode);
     bodyRotationNode->addChild(posBodyNode);
+    bodyRotationNode->addChild(dBodyNode);
+
 
     posBodyNode->addChild(towerRotationNode);
-    towerRotationNode->addChild(dTowerNode);
     towerRotationNode->addChild(posTowerNode);
+    towerRotationNode->addChild(dTowerNode);
+
 
     posTowerNode->addChild(pipeRotationNode);
-    pipeRotationNode->addChild(dPipeNode);
     pipeRotationNode->addChild(posPipeNode);
+    pipeRotationNode->addChild(dPipeNode);
+
 
     // Sinn?
-    schieb->setTransKeysUpper('e', 'r', 't');
-    schiebNode->addChild(rotNode);
+    //schieb->setTransKeysUpper('e', 'r', 't');
+    //schiebNode->addChild(rotNode);
 
 /*
     // Keys

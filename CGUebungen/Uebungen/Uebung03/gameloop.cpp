@@ -11,7 +11,7 @@ GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation*
     //Initialisieren
     chassisSensitivity = 0.5;
     turretSensitivity = 1;
-    barrelSensitivity = 0.1f;
+    barrelSensitivity = 0.3f;
 
     barrelMaxTraverseUp = 20;
     barrelMaxTraverseDown = -7;
@@ -48,17 +48,17 @@ void GameLoop::doIt(){
     //barrel, wird durch Winkelangaben Limitiert
     if (keyIn->isKeyPressed(Qt::Key_Up))
     {
-        printf("%f _ %f\n",barrelCurrentTraverseAngle, barrelMaxTraverseUp);
-        if(barrelCurrentTraverseAngle < barrelMaxTraverseUp)
-            barrel->rotate(0.1f*barrelSensitivity, 0.0f,1.0f,0.0f);
-        barrelCurrentTraverseAngle += 0.1f;
+        if(barrelCurrentTraverseAngle < barrelMaxTraverseUp){
+            barrel->rotate(-0.1f*barrelSensitivity, 1.0f,0.0f,0.0f);
+        barrelCurrentTraverseAngle += 0.1f*barrelSensitivity;
+        }
     }
     if (keyIn->isKeyPressed(Qt::Key_Down))
     {
-        printf("%f _ %f\n",barrelCurrentTraverseAngle, barrelMaxTraverseDown);
-        if(barrelCurrentTraverseAngle > barrelMaxTraverseDown)
-            barrel->rotate(-0.1f*barrelSensitivity, 1.0f,0.0f,0.0f);
-        barrelCurrentTraverseAngle -= 0.1f;
+        if(barrelCurrentTraverseAngle > barrelMaxTraverseDown){
+            barrel->rotate(0.1f*barrelSensitivity, 1.0f,0.0f,0.0f);
+        barrelCurrentTraverseAngle -= 0.1f*barrelSensitivity;
+        }
     }
 
 }
