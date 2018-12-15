@@ -14,7 +14,8 @@ SOURCES += \
     world.cpp \
     body.cpp \
     pipe.cpp \
-    tower.cpp
+    tower.cpp \
+    gameloop.cpp
 
 FORMS += \
     robot.ui
@@ -23,4 +24,5 @@ HEADERS += \
     world.h \
     body.h \
     pipe.h \
-    tower.h
+    tower.h \
+    gameloop.h

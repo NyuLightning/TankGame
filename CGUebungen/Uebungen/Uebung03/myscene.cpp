@@ -24,6 +24,7 @@
 //#include "efx-presets.h"
 
 #include "inputregistry.h"
+#include "gameloop.h"
 
 
 #include "body.h"
@@ -37,6 +38,8 @@
 #include "listener.h"
 
 #include "idleobserver.h"
+#include "qdebug.h"
+
 
 Node* initScene1();
 UITransformation* rot;
@@ -46,7 +49,7 @@ void SceneManager::initScenes()
     Ui_RobotDock* lDock;
     QDockWidget* lDockWidget = new QDockWidget(QString("Robot"), SceneManager::getMainWindow());
 
-    ControllableCamera* cam = new ControllableCamera();
+    Camera* cam = new Camera();
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
@@ -105,9 +108,9 @@ Node* initScene1()
 
     // Panzerteile erzeugen
 
-    Geometry* gTower = new TriangleMesh(path + QString("/../Models/tower.obj"));
-    Geometry* gBody = new TriangleMesh(path + QString("/../Models/body.obj"));
-    Geometry* gPipe = new TriangleMesh(path + QString("/../Models/pipe.obj"));
+    Geometry* gTower = new TriangleMesh(path + QString("/../Models/turret.obj"));
+    Geometry* gBody = new TriangleMesh(path + QString("/../Models/chassis.obj"));
+    Geometry* gPipe = new TriangleMesh(path + QString("/../Models/barrel.obj"));
 
     Drawable* dTower = new Drawable(gTower);
     Drawable* dBody = new Drawable(gBody);
@@ -148,59 +151,37 @@ Node* initScene1()
     Node *root = new Node(); // Ausgangsnode
 
     // Teile auf Anfangsposition bringen - ggf ohne f - das waren die Werte aus Blender (Origin der Objekte)
-    posTower->translate(-0.009708f, 1.69441f, 2.96733f);
-    posBody->translate(-0.005249f, 0.596072f, 1.01008f);
-    posPipe->translate(0.000068f, -0.389403f, 2.90485f); // Origin gesetzt auf hinteres Ende des Rohrs, nicht Mittelpunkt des Objekts
+    //posTower->translate(-0.009708f, 1.69441f, 2.96733f);
+    //posBody->translate(-0.005249f, 0.596072f, 1.01008f);
+    //posPipe->translate(0.000068f, -0.389403f, 2.90485f); // Origin gesetzt auf hinteres Ende des Rohrs, nicht Mittelpunkt des Objekts
 
     // Transformationen - in Zukunft mit sinnvollen Keys belegen!
     KeyboardTransformation* bodyRotation = new KeyboardTransformation();
     KeyboardTransformation* towerRotation = new KeyboardTransformation();
     KeyboardTransformation* pipeRotation = new KeyboardTransformation();
-    bodyRotation->setRotKeys(KeyboardTransformation::NoKey,
-                             KeyboardTransformation::NoKey,
-                             'q', 'Q',
-                             KeyboardTransformation::NoKey,
-                             KeyboardTransformation::NoKey);
-    towerRotation->setRotKeys(KeyboardTransformation::NoKey,
-                              KeyboardTransformation::NoKey,
-                              'v', 'V',
-                              KeyboardTransformation::NoKey,
-                              KeyboardTransformation::NoKey);
-    pipeRotation->setRotKeys('h', 'H',
-                             KeyboardTransformation::NoKey,
-                             KeyboardTransformation::NoKey,
+//    bodyRotation->setRotKeys(KeyboardTransformation::NoKey,
+//                             KeyboardTransformation::NoKey,
+//                             'q', 'Q',
+//                             KeyboardTransformation::NoKey,
+//                             KeyboardTransformation::NoKey);
+//    towerRotation->setRotKeys(KeyboardTransformation::NoKey,
+//                              KeyboardTransformation::NoKey,
+//                              'v', 'V',
+//                              KeyboardTransformation::NoKey,
+//                              KeyboardTransformation::NoKey);
+//    pipeRotation->setRotKeys('h', 'H',
+//                             KeyboardTransformation::NoKey,
+//                             KeyboardTransformation::NoKey,
 
-                             KeyboardTransformation::NoKey,
-                             KeyboardTransformation::NoKey
-                           );
+//                             KeyboardTransformation::NoKey,
+//                             KeyboardTransformation::NoKey
+//                           );
 
 
-
-    // Rotations mit Translation-Test
-
-    KeyboardInput* keyIn = InputRegistry::getInstance().getKeyboardInput();
 
     Transformation* trafo = new KeyboardTransformation();
-    int lMyKey = true? 'i':'c';
-
-    if (true)
-    {
-        // Hochschieben, um an der Schulter und nicht am Mittelpunkt zu drehen
-        trafo->translate(0.0, -1.6 , 0.0);
-        trafo->rotate(50.0, 1.0, 0.0, 0.0);
-        // Danach wieder runterschieben
-        trafo->translate(0.0, 1.6 , 0.0);
-     }
-//    if (keyIn->isKeyPressed(toupper(lMyKey)))
-//    {
-//        trafo.translate(0.0, this->getY() / 2, 0.0);
-//        trafo.rotate(-5.0, 1.0, 0.0, 0.0);
-//        trafo.translate(0.0, -this->getY() / 2, 0.0);
-//    }
-
-
-    // Geschwindigkeit mit der rotiert wird
-    //pipeRotation->setRotspeed(3.0)
+    GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation);
+    loop->doIt();
 
 
     // Transformationsnodes
