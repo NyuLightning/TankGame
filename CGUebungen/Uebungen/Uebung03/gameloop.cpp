@@ -9,13 +9,20 @@ GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation*
     this->barrel = barrel;
 
     //Initialisieren
-    chassisSensitivity = 0.5;
+    chassisSensitivity = 0.8;
     turretSensitivity = 1;
-    barrelSensitivity = 0.3f;
+    barrelSensitivity = 0.5f;
 
     barrelMaxTraverseUp = 20;
     barrelMaxTraverseDown = -7;
     barrelCurrentTraverseAngle = 0;
+
+    pipeOffset = QVector3D(0,0,0);
+    turretOffset = QVector3D(0,0,0);
+
+    // Teile auf Anfangsposition bringen
+    turret->translate(0, 2, 0);
+    barrel->translate(0, 0, 1.8);
 }
 void GameLoop::doIt(){
 
@@ -70,4 +77,8 @@ void GameLoop::SetSensitivity(float chassisS, float turretS, float barrelS){
 void GameLoop::SetBarrelLimits(float maxUp, float maxDown){
     barrelMaxTraverseUp = maxUp;
     barrelMaxTraverseDown = maxDown;
+}
+void GameLoop::SetOffsets(QVector3D pipeOffset, QVector3D turretOffset){
+    this->pipeOffset = pipeOffset;
+    this->turretOffset = turretOffset;
 }

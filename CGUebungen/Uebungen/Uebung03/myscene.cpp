@@ -149,10 +149,6 @@ Node* initScene1()
 
     Node *root = new Node(); // Ausgangsnode
 
-    // Teile auf Anfangsposition bringen
-    //posTower->translate(0, 200, 0);
-    posBody->translate(-0.005249f, 0.596072f, 1.01008f);
-    posPipe->translate(0.000068f, -0.389403f, 2.90485f); // Origin gesetzt auf hinteres Ende des Rohrs, nicht Mittelpunkt des Objekts
 
     // Transformationen - in Zukunft mit sinnvollen Keys belegen!
     KeyboardTransformation* bodyRotation = new KeyboardTransformation();
@@ -200,18 +196,14 @@ Node* initScene1()
     // Baum aufbauen
 
     root->addChild(bodyRotationNode);
-    bodyRotationNode->addChild(posBodyNode);
     bodyRotationNode->addChild(dBodyNode);
 
-
-    posBodyNode->addChild(towerRotationNode);
-    towerRotationNode->addChild(posTowerNode);
+    bodyRotationNode->addChild(towerRotationNode);
     towerRotationNode->addChild(dTowerNode);
 
-
-    posTowerNode->addChild(pipeRotationNode);
-    pipeRotationNode->addChild(posPipeNode);
+    towerRotationNode->addChild(pipeRotationNode);
     pipeRotationNode->addChild(dPipeNode);
+
 
 
     // Sinn?

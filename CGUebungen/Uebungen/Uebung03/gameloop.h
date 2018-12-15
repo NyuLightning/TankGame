@@ -4,6 +4,7 @@
 #include "idleobserver.h"
 #include "transformation.h"
 #include "inputregistry.h"
+#include <QVector3D>
 
 
 class GameLoop : public IdleObserver
@@ -18,6 +19,9 @@ class GameLoop : public IdleObserver
 
     float barrelCurrentTraverseAngle;
 
+    QVector3D pipeOffset;
+    QVector3D turretOffset;
+
     Transformation* chassis;
     Transformation* turret;
     Transformation* barrel;
@@ -27,6 +31,7 @@ public:
     void doIt();
     void SetSensitivity(float chassisS, float turretS, float barrelS);
     void SetBarrelLimits(float maxUp, float maxDown);
+    void SetOffsets(QVector3D pipeOffset, QVector3D turretOffset);
 };
 
 #endif // GAMELOOP_H
