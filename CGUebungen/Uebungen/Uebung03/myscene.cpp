@@ -59,7 +59,7 @@ void SceneManager::initScenes()
     // Vorsicht: Die Szene muss initialisiert sein, bevor das Fenster verändert wird (Fullscreen)
     SceneManager::instance()->setActiveScene(myScene);
     SceneManager::instance()->setActiveContext(myContextNr);
-    //    SceneManager::instance()->setFullScreen();
+    SceneManager::instance()->setFullScreen();
 
     cam->setEyePosition(QVector3D(.0,0.0,10.));
 
@@ -73,9 +73,9 @@ void SceneManager::initScenes()
     QObject::connect(Window::getInstance(), SIGNAL(sigFPS(int)), lDock->lcdNumber, SLOT(display(int)));
     // Hier können die Signals des UI mit eigenen QObject Slots verbunden werden und umgekehrt
     // Loesung fuer Orientierung ueber GUI mit Qt Signal/Slot
-    QObject::connect(lDock->verticalSlider, SIGNAL(valueChanged(int)), rot, SLOT(setXrot(int)));
-    QObject::connect(lDock->verticalSlider_2, SIGNAL(valueChanged(int)), rot, SLOT(setYrot(int)));
-    QObject::connect(lDock->verticalSlider_3, SIGNAL(valueChanged(int)), rot, SLOT(setZrot(int)));
+//    QObject::connect(lDock->verticalSlider, SIGNAL(valueChanged(int)), rot, SLOT(setXrot(int)));
+//    QObject::connect(lDock->verticalSlider_2, SIGNAL(valueChanged(int)), rot, SLOT(setYrot(int)));
+//    QObject::connect(lDock->verticalSlider_3, SIGNAL(valueChanged(int)), rot, SLOT(setZrot(int)));
 }
 
 Node* initScene1()
@@ -139,13 +139,13 @@ Node* initScene1()
     // Nodes anlegen
 
     Node *dTowerNode = new Node(dTower);
-    Node *posTowerNode = new Node(posTower);
+   // Node *posTowerNode = new Node(posTower);
 
     Node *dBodyNode = new Node(dBody);
-    Node *posBodyNode = new Node(posBody);
+  //  Node *posBodyNode = new Node(posBody);
 
     Node *dPipeNode = new Node(dPipe);
-    Node *posPipeNode = new Node(posPipe);
+   // Node *posPipeNode = new Node(posPipe);
 
     Node *root = new Node(); // Ausgangsnode
 

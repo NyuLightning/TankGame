@@ -67,6 +67,11 @@ void GameLoop::doIt(){
         barrelCurrentTraverseAngle -= 0.1f*barrelSensitivity;
         }
     }
+    //non GamePlay keys
+    if (keyIn->isKeyPressed(Qt::Key_Escape))
+    {
+
+    }
 
 }
 void GameLoop::SetSensitivity(float chassisS, float turretS, float barrelS){
