@@ -109,6 +109,9 @@ Node* initScene1()
     Geometry* gWorld = new TriangleMesh(path + QString("/../Models/world.obj"));
     Drawable* dWorld = new Drawable(gWorld);
     Node *dWorldNode = new Node(dWorld);
+    Transformation *posWorld = new Transformation();
+    posWorld->translate(0.0,-1.0,0.0);
+    Node *worldTranslationNode = new Node(posWorld);
 
     // Panzerteile erzeugen
 
@@ -219,7 +222,11 @@ Node* initScene1()
     towerRotationNode->addChild(pipeRotationNode);
     pipeRotationNode->addChild(dPipeNode);
 
-    root->addChild(dWorldNode);
+    root->addChild(worldTranslationNode);
+    worldTranslationNode->addChild(dWorldNode);
+
+
+
 
     // Sinn?
     //schieb->setTransKeysUpper('e', 'r', 't');
