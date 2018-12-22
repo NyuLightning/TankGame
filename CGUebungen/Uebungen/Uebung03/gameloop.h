@@ -7,6 +7,7 @@
 #include <QVector3D>
 
 
+
 class GameLoop : public IdleObserver
 {
     float chassisSensitivity;
@@ -25,6 +26,8 @@ class GameLoop : public IdleObserver
     Transformation* chassis;
     Transformation* turret;
     Transformation* barrel;
+
+
 
 public:
     GameLoop(Transformation* chassis, Transformation* turret, Transformation* barrel);

@@ -20,7 +20,7 @@
 #include "listener.h"
 //#include "audioengine.h"
 //#include "soundsource.h"
-//#include "shadermanager.h"
+#include "shadermanager.h"
 //#include "efx-presets.h"
 
 #include "inputregistry.h"
@@ -61,7 +61,7 @@ void SceneManager::initScenes()
     SceneManager::instance()->setActiveContext(myContextNr);
     SceneManager::instance()->setFullScreen();
 
-    cam->setEyePosition(QVector3D(.0,0.0,10.));
+    cam->setEyePosition(QVector3D(0.0,10.0,30.));
 
     lDock = new Ui_RobotDock();
 
@@ -76,6 +76,7 @@ void SceneManager::initScenes()
 //    QObject::connect(lDock->verticalSlider, SIGNAL(valueChanged(int)), rot, SLOT(setXrot(int)));
 //    QObject::connect(lDock->verticalSlider_2, SIGNAL(valueChanged(int)), rot, SLOT(setYrot(int)));
 //    QObject::connect(lDock->verticalSlider_3, SIGNAL(valueChanged(int)), rot, SLOT(setZrot(int)));
+
 }
 
 Node* initScene1()
@@ -104,7 +105,10 @@ Node* initScene1()
     Color* c;
 */
 
-
+    // Beispielwelt um erstmal überhaupt was zu haben / maximaler Augenkrebs
+    Geometry* gWorld = new TriangleMesh(path + QString("/../Models/world.obj"));
+    Drawable* dWorld = new Drawable(gWorld);
+    Node *dWorldNode = new Node(dWorld);
 
     // Panzerteile erzeugen
 
@@ -122,10 +126,13 @@ Node* initScene1()
     Transformation *posBody = new Transformation();
     Transformation *posPipe = new Transformation();
 
+    // Shader laden
+    Shader* s = ShaderManager::getShader(path + QString("/Shader/texture.vert"), path + QString("/Shader/texture.frag"));
+
     // Texturen laden
 
     t = dTower->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/Unbekannt.png"));
+    t->loadPicture(path + QString("/../Textures/World.png"));
 
     t = dBody->getProperty<Texture>();
     t->loadPicture(path + QString("/../Textures/Unbekannt2.png"));
@@ -133,8 +140,13 @@ Node* initScene1()
     t = dPipe->getProperty<Texture>();
     t->loadPicture(path + QString("/../Textures/Unbekannt3.png/"));
 
-    // Shader laden
-    /* ... */
+    t = dWorld->getProperty<Texture>();
+    t->loadPicture(path + QString("/../Textures/World.png"));
+
+    //Shader fuer Textur setzen - macht aber statt der Textur einfach alles schwarz
+   // dWorld->setShader(s);
+
+
 
     // Nodes anlegen
 
@@ -154,6 +166,7 @@ Node* initScene1()
     KeyboardTransformation* bodyRotation = new KeyboardTransformation();
     KeyboardTransformation* towerRotation = new KeyboardTransformation();
     KeyboardTransformation* pipeRotation = new KeyboardTransformation();
+
 //    bodyRotation->setRotKeys(KeyboardTransformation::NoKey,
 //                             KeyboardTransformation::NoKey,
 //                             'q', 'Q',
@@ -171,6 +184,8 @@ Node* initScene1()
 //                             KeyboardTransformation::NoKey,
 //                             KeyboardTransformation::NoKey
 //                          );
+
+
 
 
     GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation);
@@ -204,7 +219,7 @@ Node* initScene1()
     towerRotationNode->addChild(pipeRotationNode);
     pipeRotationNode->addChild(dPipeNode);
 
-
+    root->addChild(dWorldNode);
 
     // Sinn?
     //schieb->setTransKeysUpper('e', 'r', 't');

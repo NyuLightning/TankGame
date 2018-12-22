@@ -8,6 +8,8 @@ GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation*
     this->turret = turret;
     this->barrel = barrel;
 
+
+
     //Initialisieren
     chassisSensitivity = 0.8;
     turretSensitivity = 1;
@@ -67,11 +69,24 @@ void GameLoop::doIt(){
         barrelCurrentTraverseAngle -= 0.1f*barrelSensitivity;
         }
     }
+
+    // Vorwärts + Rückw#rts
+    if (keyIn->isKeyPressed('w'))
+    {
+
+    }
+    if (keyIn->isKeyPressed('s'))
+    {
+
+
+    }
+
     //non GamePlay keys
     if (keyIn->isKeyPressed(Qt::Key_Escape))
     {
 
     }
+
 
 }
 void GameLoop::SetSensitivity(float chassisS, float turretS, float barrelS){
