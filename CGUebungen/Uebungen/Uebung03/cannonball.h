@@ -10,9 +10,19 @@
 class Cannonball: public Drawable
 {
 public:
-    Cannonball();
+    Cannonball(float angleShot);
     ~Cannonball();
+    QVector3D* positionAtNull;
+    QVector3D* positionAtTime;
+    QVector3D* velocityAtNull;
+    QVector3D* acceleration;
+    int duration;
+    float velocityBeginning;
+    float angle;
     void fire();
+    int calculateTime();
+    void calculateVelocity();
+    void calculateDisplacementVector(int timeElapsed);
 };
 
 #endif // CANNONBALL_H
