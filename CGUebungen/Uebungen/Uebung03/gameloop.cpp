@@ -1,14 +1,13 @@
 #include "gameloop.h"
 
 
-GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation* barrel)
+GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation* barrel, Camera* cam)
 {
     //Panzer Transformations referenzen im GameLoop speichern
     this->chassis = body;
     this->turret = turret;
     this->barrel = barrel;
-
-
+    this->cam = cam;
 
     //Initialisieren
     chassisSensitivity = 0.8;
@@ -24,7 +23,8 @@ GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation*
 
     // Teile auf Anfangsposition bringen
     turret->translate(0, 2, 0);
-    barrel->translate(0, 0, 1.8);
+    barrel->translate(0, 0, 1.8);    
+
 }
 void GameLoop::doIt(){
 
@@ -80,13 +80,12 @@ void GameLoop::doIt(){
 
 
     }
+    // ///////////////////////////
 
-    //non GamePlay keys
-    if (keyIn->isKeyPressed(Qt::Key_Escape))
-    {
+    QMatrix4x4 posMatrix = turret->getModelMatrix();
+    QVector3D pos = posMatrix.column(3).toVector3DAffine(); //remove "Affine" if scaling makes trouble
 
-    }
-
+    cam->setEyePosition(pos);
 
 }
 void GameLoop::SetSensitivity(float chassisS, float turretS, float barrelS){

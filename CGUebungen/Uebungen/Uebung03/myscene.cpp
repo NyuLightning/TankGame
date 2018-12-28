@@ -41,20 +41,39 @@
 #include "qdebug.h"
 
 
+
 Node* initScene1();
-UITransformation* rot;
+//UITransformation* rot;
+
+ScreenRenderer* playWindow;
+MouseControllableCamera* cam;
+
+class KeyListener: public Listener
+{
+    void keyboard(int key, int modifier)
+    {
+        if (key == Qt::Key_Escape)
+        {
+            if (SceneManager::instance()->isInFullScreenMode())
+                SceneManager::instance()->setFullScreen(false);
+            else
+                 SceneManager::instance()->setFullScreen();
+        }
+    }
+};
 
 void SceneManager::initScenes()
 {
+    KeyListener* keyListener = new KeyListener();
     Ui_RobotDock* lDock;
     QDockWidget* lDockWidget = new QDockWidget(QString("Robot"), SceneManager::getMainWindow());
 
-    Camera* cam = new Camera();
+    cam = new MouseControllableCamera ();
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
-    ScreenRenderer* myRenderer = new ScreenRenderer(myContextNr, myScene);
-    Q_UNUSED(myRenderer);
+    playWindow = new ScreenRenderer(myContextNr, myScene);
+   // Q_UNUSED(playWindow);
 
     // Vorsicht: Die Szene muss initialisiert sein, bevor das Fenster verändert wird (Fullscreen)
     SceneManager::instance()->setActiveScene(myScene);
@@ -84,12 +103,10 @@ Node* initScene1()
     //Objekte anlegen
     QString path(SRCDIR); //aus .pro-File!
 
-
-
-    rot = new UITransformation();
-    KeyboardTransformation* schieb = new KeyboardTransformation;
-    Node* schiebNode = new Node(schieb);
-    Node* rotNode = new Node(rot);
+   // rot = new UITransformation();
+   // KeyboardTransformation* schieb = new KeyboardTransformation;
+   // Node* schiebNode = new Node(schieb);
+    //Node* rotNode = new Node(rot);
 
 /*
     //    Objekte anlegen
@@ -191,8 +208,7 @@ Node* initScene1()
 
 
 
-    GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation);
-    loop->doIt();
+    GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation, cam);
 
 
     // Transformationsnodes
