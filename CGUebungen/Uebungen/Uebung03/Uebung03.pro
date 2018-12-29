@@ -17,7 +17,6 @@ SOURCES += \
     tower.cpp \
     gameloop.cpp \
     cannonball.cpp \
-    keylistener.cpp \
     backup.cpp
 
 FORMS += \
@@ -29,5 +28,4 @@ HEADERS += \
     pipe.h \
     tower.h \
     gameloop.h \
-    cannonball.h \
-    keylistener.h
+    cannonball.h

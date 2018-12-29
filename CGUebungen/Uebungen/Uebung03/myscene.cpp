@@ -46,7 +46,7 @@ Node* initScene1();
 //UITransformation* rot;
 
 ScreenRenderer* playWindow;
-MouseControllableCamera* cam;
+Camera* cam;
 
 class KeyListener: public Listener
 {
@@ -68,7 +68,7 @@ void SceneManager::initScenes()
     Ui_RobotDock* lDock;
     QDockWidget* lDockWidget = new QDockWidget(QString("Robot"), SceneManager::getMainWindow());
 
-    cam = new MouseControllableCamera ();
+    cam = new Camera();
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
@@ -140,11 +140,9 @@ Node* initScene1()
     Drawable* dBody = new Drawable(gBody);
     Drawable* dPipe = new Drawable(gPipe);
 
+
     Texture *t;
 
-    Transformation *posTower = new Transformation();
-    Transformation *posBody = new Transformation();
-    Transformation *posPipe = new Transformation();
 
     // Shader laden
     Shader* s = ShaderManager::getShader(path + QString("/Shader/texture.vert"), path + QString("/Shader/texture.frag"));
@@ -171,41 +169,16 @@ Node* initScene1()
     // Nodes anlegen
 
     Node *dTowerNode = new Node(dTower);
-   // Node *posTowerNode = new Node(posTower);
-
     Node *dBodyNode = new Node(dBody);
-  //  Node *posBodyNode = new Node(posBody);
-
-    Node *dPipeNode = new Node(dPipe);
-   // Node *posPipeNode = new Node(posPipe);
+    Node *dPipeNode = new Node(dPipe);    
 
     Node *root = new Node(); // Ausgangsnode
 
 
     // Transformationen - in Zukunft mit sinnvollen Keys belegen!
-    KeyboardTransformation* bodyRotation = new KeyboardTransformation();
-    KeyboardTransformation* towerRotation = new KeyboardTransformation();
-    KeyboardTransformation* pipeRotation = new KeyboardTransformation();
-
-//    bodyRotation->setRotKeys(KeyboardTransformation::NoKey,
-//                             KeyboardTransformation::NoKey,
-//                             'q', 'Q',
-//                             KeyboardTransformation::NoKey,
-//                             KeyboardTransformation::NoKey);
-//    towerRotation->setRotKeys(KeyboardTransformation::NoKey,
-//                              KeyboardTransformation::NoKey,
-//                              'v', 'V',
-//                              KeyboardTransformation::NoKey,
-//                              KeyboardTransformation::NoKey);
-//    pipeRotation->setRotKeys('h', 'H',
-//                             KeyboardTransformation::NoKey,
-//                             KeyboardTransformation::NoKey,
-
-//                             KeyboardTransformation::NoKey,
-//                             KeyboardTransformation::NoKey
-//                          );
-
-
+    Transformation* bodyRotation = new Transformation();
+    Transformation* towerRotation = new Transformation();
+    Transformation* pipeRotation = new Transformation();
 
 
     GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation, cam);
