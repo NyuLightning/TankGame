@@ -1,19 +1,13 @@
 #include "opengl.h"
 #include "screenrenderer.h"
 #include "transformation.h"
-#include "keyboardtransformation.h"
 #include "color.h"
-#include "bodypart.h"
-#include "kopf.h"
-#include "arm.h"
-#include "controllablecamera.h"
+
 #include "scenemanager.h"
 #include "window.h"
 #include "uitransformation.h"
 
 #include "ui_robot.h"
-
-#include "mousecontrollablecamera.h"
 #include "trianglemesh.h"
 #include "texture.h"
 #include "shader.h"
@@ -26,19 +20,16 @@
 #include "inputregistry.h"
 #include "gameloop.h"
 
-
 #include "body.h"
 #include "tower.h"
 #include "pipe.h"
+#include "projectile.h"
 
 #include "world.h"
-#include "trianglemesh.h"
 
 #include "bodypart.h"
-#include "listener.h"
 
 #include "idleobserver.h"
-#include "qdebug.h"
 
 #include "scenemanager.h"
 #include "screenrenderer.h"
@@ -56,6 +47,8 @@ Node* initScene1();
 
 ScreenRenderer* playWindow;
 Camera* cam;
+PhysicEngine* v_PhysicEngine;
+
 
 void addShaderHit(Drawable* d)
 {
@@ -90,6 +83,10 @@ void SceneManager::initScenes()
     KeyListener* keyListener = new KeyListener();
     Ui_RobotDock* lDock;
     QDockWidget* lDockWidget = new QDockWidget(QString("Robot"), SceneManager::getMainWindow());
+
+    // Physic Engine Erzeugen und einen Pointer auf Instanz holen
+    int v_Slot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
+    v_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
 
     cam = new Camera();
     RenderingContext* myContext = new RenderingContext(cam);
@@ -152,7 +149,6 @@ Node* initScene1()
     Transformation *posWorld = new Transformation();
     posWorld->translate(0.0,-1.0,0.0);
     Node *worldTranslationNode = new Node(posWorld);
-
     // Panzerteile erzeugen
 
     Geometry* gTower = new TriangleMesh(path + QString("/../Models/turret.obj"));
@@ -162,7 +158,6 @@ Node* initScene1()
     Drawable* dTower = new Drawable(gTower);
     Drawable* dBody = new Drawable(gBody);
     Drawable* dPipe = new Drawable(gPipe);
-
 
     Texture *t;
 
@@ -206,7 +201,7 @@ Node* initScene1()
     Transformation* pipeRotation = new Transformation();
 
 
-    GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation, cam);
+    GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation, cam, root, v_PhysicEngine);
 
 
     // Transformationsnodes

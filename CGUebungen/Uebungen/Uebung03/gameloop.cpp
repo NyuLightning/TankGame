@@ -1,13 +1,16 @@
 #include "gameloop.h"
 
 
-GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation* barrel, Camera* cam)
+GameLoop::GameLoop(Transformation* body, Transformation* turret,
+                   Transformation* barrel, Camera* cam, Node* rootNode, PhysicEngine* phyEngine)
 {
     //Panzer Transformations referenzen im GameLoop speichern
     this->chassis = body;
     this->turret = turret;
     this->barrel = barrel;
     this->cam = cam;
+    this->rootNode = rootNode;
+    this->phyEngine = phyEngine;
 
     //Initialisieren
     chassisSensitivity = 0.8;
@@ -25,7 +28,6 @@ GameLoop::GameLoop(Transformation* body, Transformation* turret, Transformation*
     turret->translate(0, 2, 0);
     barrel->translate(0, 0, 1.8);
     cam->rotate(180,0,0);
-
 }
 void GameLoop::doIt(){
 
@@ -80,6 +82,11 @@ void GameLoop::doIt(){
     {
 
 
+    }
+    if (keyIn->isKeyPressed(Qt::Key_Space))
+    {
+        Projectile* bullet = new Projectile(phyEngine);
+        rootNode->addChild(bullet->getNode());
     }
     // ///////////////////////////
 
