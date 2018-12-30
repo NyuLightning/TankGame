@@ -86,6 +86,7 @@ void GameLoop::doIt(){
     if (keyIn->isKeyPressed(Qt::Key_Space))
     {
         Projectile* bullet = new Projectile(phyEngine);
+        rootNode->addChild(bullet->getNode());
     }
     // ///////////////////////////
 
