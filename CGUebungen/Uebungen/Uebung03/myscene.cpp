@@ -31,7 +31,14 @@
 
 #include "idleobserver.h"
 
-
+#include "scenemanager.h"
+#include "screenrenderer.h"
+#include "controllablecamera.h"
+#include "simpleplane.h"
+#include "shadertimed.h"
+#include "transformation.h"
+#include "shadermanager.h"
+#include "modeltransformation.h"
 
 Node* initScene1();
 //UITransformation* rot;
@@ -40,6 +47,19 @@ ScreenRenderer* playWindow;
 Camera* cam;
 PhysicEngine* v_PhysicEngine;
 
+void addShaderHit(Drawable* d)
+{
+    // Setze Shader wenn Objekt zerstört
+    ShaderTimed* redWaveformShader = ShaderManager::getShader<ShaderTimed>("/Shader/wavemotion.vert", "/Shader/hello_glsl.frag");
+    redWaveformShader->setMsecsPerIteration(600);
+    d->setShader(redWaveformShader);
+
+    // Warte n Sekunden
+    //
+
+    // Lösche Objekt nachdem Animation abgelaufen
+    //delete d;
+}
 
 class KeyListener: public Listener
 {
@@ -140,7 +160,11 @@ Node* initScene1()
 
 
     // Shader laden
+<<<<<<< HEAD
    // Shader* s = ShaderManager::getShader(path + QString("/Shader/texture.vert"), path + QString("/Shader/texture.frag"));
+=======
+        Shader* s = ShaderManager::getShader("/Shader/texture.vert","/Shader/texture.frag");
+>>>>>>> 23dfc0dbb33954ab9e90ee1859e1dcbbab0dbff5
 
     // Texturen laden
 
@@ -154,11 +178,19 @@ Node* initScene1()
     t->loadPicture(path + QString("/../Textures/Unbekannt3.png/"));
 
     t = dWorld->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/World.png"));
+    t->loadPicture(path + QString("/../Textures/Camo.png"));
 
-    //Shader fuer Textur setzen - macht aber statt der Textur einfach alles schwarz
-   // dWorld->setShader(s);
+    //Shader fuer Textur setzen
+    dWorld->setShader(s);
 
+    // Shader
+    dWorld->setShader(s);
+    dBody->setShader(s);
+    dPipe->setShader(s);
+    dTower->setShader(s);
+
+    // Beispiel
+    addShaderHit(dBody);
 
 
     // Nodes anlegen
