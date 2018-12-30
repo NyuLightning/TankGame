@@ -29,3 +29,6 @@ HEADERS += \
     tower.h \
     gameloop.h \
     cannonball.h
+	
+RESOURCES += \
+    MyShaders.qrc
