@@ -160,11 +160,10 @@ Node* initScene1()
 
 
     // Shader laden
-<<<<<<< HEAD
-   // Shader* s = ShaderManager::getShader(path + QString("/Shader/texture.vert"), path + QString("/Shader/texture.frag"));
-=======
-        Shader* s = ShaderManager::getShader("/Shader/texture.vert","/Shader/texture.frag");
->>>>>>> 23dfc0dbb33954ab9e90ee1859e1dcbbab0dbff5
+
+
+    Shader* s = ShaderManager::getShader("/Shader/texture.vert","/Shader/texture.frag");
+
 
     // Texturen laden
 
