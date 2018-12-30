@@ -17,7 +17,8 @@ SOURCES += \
     tower.cpp \
     gameloop.cpp \
     cannonball.cpp \
-    backup.cpp
+    backup.cpp \
+    projectile.cpp
 
 FORMS += \
     robot.ui
@@ -28,4 +29,5 @@ HEADERS += \
     pipe.h \
     tower.h \
     gameloop.h \
-    cannonball.h
+    cannonball.h \
+    projectile.h

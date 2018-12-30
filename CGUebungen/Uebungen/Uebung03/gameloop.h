@@ -4,13 +4,16 @@
 #include "idleobserver.h"
 #include "transformation.h"
 #include "inputregistry.h"
-#include <QVector3D>
 #include "camera.h"
+#include "projectile.h"
 
 
 
 class GameLoop : public IdleObserver
 {
+    //Root Node um Kugeln einzuhängen
+    Node* rootNode;
+
     float chassisSensitivity;
     float turretSensitivity;
     float barrelSensitivity;
@@ -33,10 +36,11 @@ class GameLoop : public IdleObserver
     QVector3D turretPosition;
 
     Camera* cam;
+    PhysicEngine* phyEngine;
 
 
 public:
-    GameLoop(Transformation* chassis, Transformation* turret, Transformation* barrel, Camera* cam);
+    GameLoop(Transformation* chassis, Transformation* turret, Transformation* barrel, Camera* cam, Node* rootNode, PhysicEngine* phyEngine);
     void doIt();
     void SetSensitivity(float chassisS, float turretS, float barrelS);
     void SetBarrelLimits(float maxUp, float maxDown);

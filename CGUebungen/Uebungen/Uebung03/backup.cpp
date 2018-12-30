@@ -1,223 +1,105 @@
-#include "scenemanager.h"
-#include "screenrenderer.h"
-#include "mousecontrollablecamera.h"
-#include "trianglemesh.h"
-#include "texture.h"
-#include "shader.h"
-#include "listener.h"
-#include "transformation.h"
-#include "keyboardtransformation.h"
-#include "planet.h"
-#include "color.h"
-#include "audioengine.h"
-#include "soundsource.h"
-#include "shadermanager.h"
-#include "efx-presets.h"
+//#include "opengl.h"
+//#include "scenemanager.h"
+//#include "transformation.h"
+//#include "keyboardtransformation.h"
+//#include "color.h"
+//#include "simplecube.h"
+//#include "simpleplane.h"
+//#include "mainwindow.h"
+//#include "controllablecamera.h"
+//#include "screenrenderer.h"
 
-Node *initScene1();
-Node *initScene2();
+//Node* initScene1();
 
-ScreenRenderer* sortedRenderer;
-ScreenRenderer* preOrderRenderer;
-unsigned int myScene, myScene2;
-SoundSource *gSoundSource1, *gSoundSource2, *gSoundSource3, *gAmbientSoundSource;
-Node* gAudioListenerNode;
+//void SceneManager::initScenes()
+//{
+//    ControllableCamera* cam = new ControllableCamera();
+//    RenderingContext* myContext = new RenderingContext(cam);
+//    unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
+//    unsigned int myScene = SceneManager::instance()->addScene(initScene1());
+//    ScreenRenderer* myRenderer = new ScreenRenderer(myContextNr, myScene);
+//    Q_UNUSED(myRenderer);
 
-class SceneSwitcher: public Listener
-{
-    void keyboard(int key, int modifier)
-    {
-        if (key == '1')
-        {
-            sortedRenderer->setScene(myScene);
-            gSoundSource1->play();
-        }
-        else if(key =='2')
-        {
-            sortedRenderer->setScene(myScene2);
-            gSoundSource2->play();
-        }
-        else if (key == 'l' || key == 'L')
-        {
-            gSoundSource3->play();
-        }
-    }
-};
+//    // Vorsicht: Die Szene muss initialisiert sein, bevor das Fenster verändert wird (Fullscreen)
+//    SceneManager::instance()->setActiveScene(myScene);
+//    SceneManager::instance()->setActiveContext(myContextNr);
+//    //    SceneManager::instance()->setFullScreen();
+//}
 
-void SceneManager::initScenes()
-{
-    SceneSwitcher* lSwitch = new SceneSwitcher();
-    MouseControllableCamera* cam = new MouseControllableCamera();
-    RenderingContext* myContext = new RenderingContext(cam);
-    unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
-    myScene = SceneManager::instance()->addScene(initScene1());
-    myScene2 = SceneManager::instance()->addScene(initScene2());
-    sortedRenderer = new ScreenRenderer(myContextNr, myScene);
-    Q_UNUSED(lSwitch);
+//Node* initScene1()
+//{
+//    //    QString path(SRCDIR); // aus .pro-File!
+//    // Physic Engine Erzeugen und einen Pointer auf Instanz holen
+//    int v_Slot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
+//    PhysicEngine* v_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
+//    Node* root = new Node(new Transformation);
 
-    //Vorsicht: Die Szene muss initialisiert sein, bevor das Fenster verändert wird (Fullscreen)
-    SceneManager::instance()->setActiveScene(myScene);
-    SceneManager::instance()->setActiveContext(myContextNr);
-    SceneManager::instance()->setFullScreen();
-}
+// Array für Cubes und dazugehörigen PhysicObjects
+//#define V_NUMBER_CUBES 10
+//    Transformation* v_Transformations[V_NUMBER_CUBES];
+//    Drawable* v_Cubes[V_NUMBER_CUBES];
+//    PhysicObject* v_PhysicObjects[V_NUMBER_CUBES];
+//    for (int i = 0; i < V_NUMBER_CUBES; i++)
+//    {
+//        // Transformation erzeugen für Position
+//        v_Transformations[i] = new Transformation();
+//        v_Transformations[i]->translate(0.f, ((float)i + 0.25f) * 2.f, 0.f);
 
-Node *initScene1()
-{
-    //Objekte anlegen
-    QString path(SRCDIR); //aus .pro-File!
+//        // Trafo in Baum hängen
+//        Node* transformationNode = new Node(v_Transformations[i]);
+//        root->addChild(transformationNode);
 
-    //AudioListener anlegen
-    AudioListener* lAudioListener= new AudioListener();
-    gAudioListenerNode = new Node(lAudioListener);
+//        // Geometrie und Szenenobjekt erzeugen
+//        v_Cubes[i] = new Drawable(new SimpleCube(1.f));
+//        transformationNode->addChild(new Node(v_Cubes[i]));
+//        v_Cubes[i]->getProperty<Color>()->setValue(1.f / ((float)i + 1.f), 1.f / ((float)i + 1.f), 1.f / ((float)i + 1.f), 1.f);
 
-    //Sounds initialisieren, Fallback auf Stereo, falls OpenAL nicht verfügbar
-    AudioEngine::instance().init(AudioEngineType::OpenAL3D);
-    //Oder direkt Qt Sound verwenden
-//    AudioEngine::instance().init(AudioEngineType::QtStereo);
+//        // Ein PhysicObject von der Engine für ein Drawable erzeugen lassen
+//        v_PhysicObjects[i] = v_PhysicEngine->createNewPhysicObject(v_Cubes[i]);
 
-    //Wichtig: OpenAL kann Sounds nur in WAV 16 Bit
-    //Wenn 3D-Sound erzeugt werden soll, müssen diese außerdem MONO sein!
-    gSoundSource1 = new SoundSource(new SoundFile(path+QString("/sounds/Hammering.wav")));
-    gSoundSource2 = new SoundSource(new SoundFile(path+QString("/sounds/CityAmbiance.wav")));
-    gSoundSource3 = new SoundSource(new SoundFile(path+QString("/sounds/LaserCannon.wav")));
-    Node *lSource1Node = new Node(gSoundSource1);
-    Node *lSource2Node = new Node(gSoundSource2);
-    Node *lSource3Node = new Node(gSoundSource3);
+//        // Ein PhysicObjectConstructionInfo Objekt erzeugen, welches die Eigenschaften eines PhysicObjects festlegt,
+//        // für jede Eigenschaft gibt es einen Standardwert, das Objekt wird später automatisch gelöscht
+//        PhysicObjectConstructionInfo* v_PhysicObjectConstructionInfo = new PhysicObjectConstructionInfo();
+//        // Optionale veränderung der Informationen
+//        v_PhysicObjectConstructionInfo->setBoxHalfExtends(QVector3D(0.5f, 0.5f, 0.5f)); // Ausdehnung des Würfels in
+//                                                                                        // halber länge angeben
+//        v_PhysicObjectConstructionInfo->setCcdActivation(true); // durchdringen durch andere Objekte Abfangen, benötigt
+//                                                                // mehr Rechenzeit
+//        v_PhysicObjectConstructionInfo->setCollisionHull(CollisionHull::BoxHalfExtends); // Form des Hüllkörpers
+//                                                                                         // festlegen
+//        v_PhysicObjectConstructionInfo->setFriction(0.5f); // Reibung zwischen 0 und 1 angeben, 0 keine reibung 1
+//                                                           // maximal
+//        v_PhysicObjectConstructionInfo->setLocalInertiaPoint(QVector3D(0.f, 0.f, 0.f)); // Schwerpunkt des Objektes
+//                                                                                        // angeben, Standardwert (0,0,0)
+//        v_PhysicObjectConstructionInfo->setMass(2.f); // Gewicht des Körpers bestimmen, sollte nicht zu groß gewählt
+//                                                      // werden
+//        v_PhysicObjectConstructionInfo->setMidpointTransformation(QMatrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)); // Mittelpunkttransformation angeben falls
+//        // Geometrie in seinem Koordinatensystem
+//        // verschoben liegt
+//        v_PhysicObjectConstructionInfo->setRestitution(0.1f);     // Elastizität des Körpers bestimmen, von 0 bis 1
+//                                                                  // definiert
+//        v_PhysicObjectConstructionInfo->setRollingFriction(0.1f); // Rollwiderstand vorallem bei Kugeln angeben
 
-    //NatureAmbience ist Stereo und ändert daher als ambienter Sound seine "Position" nicht
-    gAmbientSoundSource = new SoundSource(new SoundFile(path+QString("/sounds/NatureAmbiance.wav")));
-    gAmbientSoundSource->setLooping(true);
-    gAmbientSoundSource->play();
+//        // Dem PhysicObject die Konstruktionsinforaionen geben
+//        v_PhysicObjects[i]->setConstructionInfo(v_PhysicObjectConstructionInfo);
 
-    Node *root = new Node();
-    Drawable *model2 = new Drawable(new TriangleMesh(path+QString("/modelstextures/skyCaveShip.obj")));
+//        // Das PhysicObject in seiner Engine Registrieren, damit die Simulation starten kann
+//        v_PhysicObjects[i]->registerPhysicObject();
+//    }
 
-    //Geometrien können mehrfach verwendet werden -> gleiche Geometrie, anderes Erscheinungsbild
-    Geometry* g = new TriangleMesh(path + QString("/modelstextures/ogrehead.obj"));
-    Drawable* model1 = new Drawable(g);
-    Drawable* model = new Drawable(g);
-    Texture* t;
-    Shader* s = ShaderManager::getShader(path + QString("/shader/texture.vert"), path + QString("/shader/texture.frag"));
-    Transformation *pos = new Transformation(), *pos2 = new Transformation();
+//    // Platte erstellen auf welche die Würfel fallen
+//    Drawable* v_Plane = new Drawable(new SimplePlane(10.f));
+//    v_Plane->setStaticGeometry(true);
+//    Transformation* v_TransformationPlane = new Transformation();
+//    Node* transformationPlaneNode = new Node(v_TransformationPlane);
+//    v_TransformationPlane->rotate(-90.f, 1.f, 0.f, 0.f);
+//    PhysicObject* v_PlanePhys = v_PhysicEngine->createNewPhysicObject(v_Plane);
+//    PhysicObjectConstructionInfo* v_Constrinf = new PhysicObjectConstructionInfo();
+//    v_Constrinf->setCollisionHull(CollisionHull::BoxAABB); // Automatische generierung einer Box aus den Vertexpunkten
+//    v_PlanePhys->setConstructionInfo(v_Constrinf);
+//    v_PlanePhys->registerPhysicObject();
+//    transformationPlaneNode->addChild(new Node(v_Plane));
 
-    // Nodes anlegen
-    Node* model1Node = new Node(model1);
-    Node* posNode = new Node(pos);
-    Node* modelNode = new Node(model);
-    Node* pos2Node = new Node(pos2);
-    Node* model2Node = new Node(model2);
-
-    model1->deactivateFill();
-    //Texturen laden
-    t = model->getProperty<Texture>();
-    t->loadPicture(path + QString("/modelstextures/ogrehead_diffuse.png"));
-
-    //Texturen laden
-    t = model2->getProperty<Texture>();
-    t->loadPicture(path + QString("/modelstextures/skyCaveShip_TEX.png"));
-
-    //Shader fuer Textur setzen
-    model->setShader(s);
-    model2->setShader(s);
-
-    pos->translate(2.0, 0.0, 0.0);
-    pos2->translate(0.0, 3.0, 0.0);
-
-    KeyboardTransformation *lKB = new KeyboardTransformation();
-    Node *lKBNode = new Node(lKB);
-    lKB->setTransKeys('l','L',
-                     KeyboardTransformation::NoKey, KeyboardTransformation::NoKey,
-                     KeyboardTransformation::NoKey, KeyboardTransformation::NoKey);
-
-    // Baum aufbauen
-    root->addChild(gAudioListenerNode);
-    root->addChild(model1Node);
-    posNode->addChild(lSource1Node);
-    root->addChild(posNode);
-    posNode->addChild(modelNode);
-    root->addChild(lKBNode);
-    posNode->addChild(lSource2Node);
-    lKBNode->addChild(pos2Node);
-    pos2Node->addChild(model2Node);
-    pos2Node->addChild(lSource3Node);
-    return(root);
-}
-
-Node *initScene2()
-{
-//    Objekte anlegen
-    Planet* sonne = new Planet(1.0);
-    KeyboardTransformation* sonnensystem = new KeyboardTransformation();
-    KeyboardTransformation *erdrotation = new KeyboardTransformation();
-    KeyboardTransformation *mondrotation = new KeyboardTransformation();
-    Transformation *erdUmlaufbahn = new Transformation();
-    Transformation *mondOrbit = new Transformation();
-    Planet *meineErde = new Planet(0.2F);
-    Planet *meinMond = new Planet(0.05F);
-    Color *c;
-    float mondspeed = 7.0, umlaufspeed=mondspeed/12.0, erdspeed=mondspeed*28.0;
-
-    // Nodes anlegen
-    Node* sonneNode = new Node(sonne);
-    Node* sonnensystemNode = new Node(sonnensystem);
-    Node* erdrotationNode = new Node(erdrotation);
-    Node* mondrotationNode = new Node(mondrotation);
-    Node* erdUmlaufbahnNode = new Node(erdUmlaufbahn);
-    Node* mondOrbitNode = new Node(mondOrbit);
-    Node* meineErdeNode = new Node(meineErde);
-    Node* meinMondNode = new Node(meinMond);
-
-    //Farben
-    c = sonne->getProperty<Color>();
-    c->setValue(1.0,1.0,0.0,1.0);
-    c = meineErde->getProperty<Color>();
-    c->setValue(0.0,0.0,1.0,1.0);
-    c = meinMond->getProperty<Color>();
-    c->setValue(0.7F,0.7F,0.7F,1.0F);
-
-    //Damit man die Drehungen sieht, Gitternetz aktivieren
-    sonne->deactivateFill();
-    meineErde->deactivateFill();
-    meinMond->deactivateFill();
-
-    //Keys belegen
-    sonnensystem->setRotKeys(KeyboardTransformation::NoKey,
-                             KeyboardTransformation::NoKey,
-                             'r', 'R',
-                             KeyboardTransformation::NoKey,
-                             KeyboardTransformation::NoKey);
-    sonnensystem->setRotspeed(umlaufspeed);
-    erdrotation->setRotKeys('r', 'R',
-                            KeyboardTransformation::NoKey,
-                            KeyboardTransformation::NoKey,
-                            KeyboardTransformation::NoKey,
-                            KeyboardTransformation::NoKey
-                            );
-    erdrotation->setRotspeed(erdspeed);
-    mondrotation->setRotKeys(KeyboardTransformation::NoKey,
-                            KeyboardTransformation::NoKey,
-                            KeyboardTransformation::NoKey,
-                            KeyboardTransformation::NoKey,
-                             'r', 'R'
-                             );
-    mondrotation->setRotspeed(mondspeed);
-
-    //Vorsicht beim ändern von Rot. und Trans. derselben Transformation:
-    //Die Reihenfolge ist wichtig!
-    sonnensystem->rotate(45.0, 1.0, 0.0, 0.0); // Neigen, damit man die Umlaufbahn besser sieht
-    erdUmlaufbahn->translate(3.0, 0.0, 0.0);   // Erdumlaufbahn
-    mondOrbit->translate(0.5, 0.0, 0.0);
-
-    // Szenengraph aufbauen
-    sonnensystemNode->addChild(gAudioListenerNode);
-    sonnensystemNode->addChild(sonneNode);
-    sonneNode->addChild(erdUmlaufbahnNode);
-    erdUmlaufbahnNode->addChild(erdrotationNode);
-    erdUmlaufbahnNode->addChild(mondrotationNode);
-    mondrotationNode->addChild(mondOrbitNode);
-    mondOrbitNode->addChild(meinMondNode);
-    erdrotationNode->addChild(meineErdeNode);
-    erdrotationNode->addChild(new Node(gSoundSource1));
-    return (sonnensystemNode);
-}
-
+//    root->addChild(transformationPlaneNode);
+//    return (root);
+//}
