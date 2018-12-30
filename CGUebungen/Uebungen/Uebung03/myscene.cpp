@@ -31,15 +31,6 @@
 
 #include "idleobserver.h"
 
-#include "scenemanager.h"
-#include "screenrenderer.h"
-#include "controllablecamera.h"
-#include "simpleplane.h"
-#include "shadertimed.h"
-#include "transformation.h"
-#include "shadermanager.h"
-#include "modeltransformation.h"
-
 
 
 Node* initScene1();
@@ -49,20 +40,6 @@ ScreenRenderer* playWindow;
 Camera* cam;
 PhysicEngine* v_PhysicEngine;
 
-
-void addShaderHit(Drawable* d)
-{
-    // Setze Shader wenn Objekt zerstört
-    ShaderTimed* redWaveformShader = ShaderManager::getShader<ShaderTimed>("/Shader/wavemotion.vert", "/Shader/hello_glsl.frag");
-    redWaveformShader->setMsecsPerIteration(600);
-    d->setShader(redWaveformShader);
-
-    // Warte n Sekunden
-    //
-
-    // Lösche Objekt nachdem Animation abgelaufen
-    //delete d;
-}
 
 class KeyListener: public Listener
 {
@@ -163,28 +140,26 @@ Node* initScene1()
 
 
     // Shader laden
-    Shader* s = ShaderManager::getShader("/Shader/texture.vert","/Shader/texture.frag");
-
+    Shader* s = ShaderManager::getShader(path + QString("/Shader/texture.vert"), path + QString("/Shader/texture.frag"));
 
     // Texturen laden
 
     t = dTower->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/PLATZHALTER.png"));
+    t->loadPicture(path + QString("/../Textures/World.png"));
 
     t = dBody->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/PLATZHALTER.png/"));
+    t->loadPicture(path + QString("/../Textures/Unbekannt2.png"));
 
     t = dPipe->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/PLATZHALTER.png"));
+    t->loadPicture(path + QString("/../Textures/Unbekannt3.png/"));
 
     t = dWorld->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/Camo.png"));
+    t->loadPicture(path + QString("/../Textures/World.png"));
 
-    //Shader
-    dWorld->setShader(s);
-    dBody->setShader(s);
-    dPipe->setShader(s);
-    dTower->setShader(s);
+    //Shader fuer Textur setzen - macht aber statt der Textur einfach alles schwarz
+   // dWorld->setShader(s);
+
+
 
     // Nodes anlegen
 

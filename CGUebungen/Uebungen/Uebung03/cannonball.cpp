@@ -2,7 +2,7 @@
 
 //const float fallbeschleunigung = 9.81f;
 
-///*
+//
 
 
 //     Formeln: http://farside.ph.utexas.edu/teaching/301/lectures/node34.html
@@ -63,7 +63,7 @@
 //    positionAtTime->setZ(velocityAtNull->z() * timeElapsed - 0.5f * fallbeschleunigung * (timeElapsed * timeElapsed));
 //}
 
-////int Cannonball::calculateTime()
-////{
-////    duration = ((2.0f*velocityBeginning)/fallbeschleunigung);
-////}
+//int Cannonball::calculateTime()
+//{
+//    duration = ((2.0f*velocityBeginning)/fallbeschleunigung);
+//}

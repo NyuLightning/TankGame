@@ -76,7 +76,7 @@ void GameLoop::doIt(){
         }
     }
 
-    // Vorwärts + Rückwärts
+    // Vorwärts + Rückw#rts
     if (keyIn->isKeyPressed('w'))
     {
 
