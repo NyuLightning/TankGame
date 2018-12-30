@@ -10,11 +10,11 @@
 #include "ui_robot.h"
 #include "trianglemesh.h"
 #include "texture.h"
-#include "shader.h"
+//#include "shader.h"
 #include "listener.h"
 //#include "audioengine.h"
 //#include "soundsource.h"
-#include "shadermanager.h"
+//#include "shadermanager.h"
 //#include "efx-presets.h"
 
 #include "inputregistry.h"
@@ -140,7 +140,7 @@ Node* initScene1()
 
 
     // Shader laden
-    Shader* s = ShaderManager::getShader(path + QString("/Shader/texture.vert"), path + QString("/Shader/texture.frag"));
+   // Shader* s = ShaderManager::getShader(path + QString("/Shader/texture.vert"), path + QString("/Shader/texture.frag"));
 
     // Texturen laden
 

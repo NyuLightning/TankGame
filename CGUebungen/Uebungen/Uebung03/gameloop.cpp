@@ -6,6 +6,7 @@ GameLoop::GameLoop(Transformation* body, Transformation* turret,
 {
     //nicht direkt schießen können, da buggy
     lastFiredTime = QTime::currentTime();
+    bool hasFired = true;
 
     //Panzer Transformations referenzen im GameLoop speichern
     this->chassis = body;
@@ -90,11 +91,19 @@ void GameLoop::doIt(){
     {
         QTime currentTime = QTime::currentTime();
 
-        if(currentTime > lastFiredTime.addSecs(6)){
-            Projectile* bullet = new Projectile(phyEngine);
-            rootNode->addChild(bullet->getNode());
+        if(currentTime > lastFiredTime.addSecs(2)){
+            hasFired = true;
             lastFiredTime = QTime::currentTime();
-        }
+
+            QMatrix4x4 turretMatrix = turret->getModelMatrix();
+            turretMatrix.flipCoordinates();
+            //QMatrix4x4 barrelMatrix = barrel->getModelMatrix();
+            //QMatrix4x4 combinedmatrix = turretMatrix*barrelMatrix;
+            //combinedmatrix.flipCoordinates();
+
+            Projectile* bullet = new Projectile(phyEngine, QVector3D(0,0,-1) * turretMatrix);
+            rootNode->addChild(bullet->getNode());
+        }        
     }
     // ///////////////////////////
 
@@ -115,7 +124,7 @@ void GameLoop::doIt(){
 //    up = up.normalized();
 //    right = right.normalized();
 
-//    QMatrix4x4 CameraRotationMatrix;
+//    QMatrix4x4 CameraRotationMatrix;1
 //    CameraRotationMatrix.setColumn(0,QVector4D(right,1));
 //    CameraRotationMatrix.setColumn(1,QVector4D(up,1));
 //    CameraRotationMatrix.setColumn(2,QVector4D(forward,1));

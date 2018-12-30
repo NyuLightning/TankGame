@@ -8,6 +8,9 @@
 
 class Projectile
 {
+
+    float _projectileSpeed;
+
     PhysicEngine* _phyEngine;
     Geometry* _geometry;
     Drawable* _drawable;
@@ -15,9 +18,11 @@ class Projectile
     PhysicObject* _phyObj;
     Node* _Node;
 
+    QString path;
+
 
 public:
-    Projectile(PhysicEngine* physicEngine);
+    Projectile(PhysicEngine* physicEngine, QVector3D direction);
 
     Node* getNode();
 };

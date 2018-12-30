@@ -14,6 +14,7 @@ class GameLoop : public IdleObserver
 {
     //schussProSekunde limitierung
     QTime lastFiredTime;
+    bool hasFired;
 
     //Root Node um Kugeln einzuhängen
     Node* rootNode;

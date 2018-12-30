@@ -1,8 +1,9 @@
 #include "projectile.h"
 #include "trianglemesh.h"
 
-Projectile::Projectile(PhysicEngine* PhysicEngine)
+Projectile::Projectile(PhysicEngine* PhysicEngine, QVector3D direction)
 {
+    _projectileSpeed = 50;
     QString path(SRCDIR);
 
     _phyEngine = PhysicEngine;
@@ -39,6 +40,9 @@ Projectile::Projectile(PhysicEngine* PhysicEngine)
 
     // Das PhysicObject in seiner Engine Registrieren, damit die Simulation starten kann
     _phyObj->registerPhysicObject();
+
+    direction.normalize();
+    _phyObj->setLinearVelocity(direction*_projectileSpeed);
 }
 
 Node* Projectile::getNode(){
