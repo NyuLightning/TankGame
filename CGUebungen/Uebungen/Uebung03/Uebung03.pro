@@ -29,5 +29,12 @@ HEADERS += \
     pipe.h \
     tower.h \
     gameloop.h \
+<<<<<<< HEAD
+    cannonball.h
+	
+RESOURCES += \
+    MyShaders.qrc
+=======
     cannonball.h \
     projectile.h
+>>>>>>> 7e2d0e4efffefc004273a91c6d8cb4c08f03503a
