@@ -4,6 +4,9 @@
 GameLoop::GameLoop(Transformation* body, Transformation* turret,
                    Transformation* barrel, Camera* cam, Node* rootNode, PhysicEngine* phyEngine)
 {
+    //nicht direkt schießen können, da buggy
+    lastFiredTime = QTime::currentTime();
+
     //Panzer Transformations referenzen im GameLoop speichern
     this->chassis = body;
     this->turret = turret;
@@ -85,8 +88,13 @@ void GameLoop::doIt(){
     }
     if (keyIn->isKeyPressed(Qt::Key_Space))
     {
-        Projectile* bullet = new Projectile(phyEngine);
-        rootNode->addChild(bullet->getNode());
+        QTime currentTime = QTime::currentTime();
+
+        if(currentTime > lastFiredTime.addSecs(6)){
+            Projectile* bullet = new Projectile(phyEngine);
+            rootNode->addChild(bullet->getNode());
+            lastFiredTime = QTime::currentTime();
+        }
     }
     // ///////////////////////////
 

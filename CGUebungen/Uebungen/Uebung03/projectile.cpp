@@ -33,6 +33,7 @@ Projectile::Projectile(PhysicEngine* PhysicEngine)
                                                               // definiert
     v_PhysicObjectConstructionInfo->setRollingFriction(0.1f); // Rollwiderstand vorallem bei Kugeln angeben
 
+
     // Dem PhysicObject die Konstruktionsinforaionen geben
     _phyObj->setConstructionInfo(v_PhysicObjectConstructionInfo);
 

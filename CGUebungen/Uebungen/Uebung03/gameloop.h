@@ -6,11 +6,15 @@
 #include "inputregistry.h"
 #include "camera.h"
 #include "projectile.h"
+#include <QTime>
 
 
 
 class GameLoop : public IdleObserver
 {
+    //schussProSekunde limitierung
+    QTime lastFiredTime;
+
     //Root Node um Kugeln einzuhängen
     Node* rootNode;
 
