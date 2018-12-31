@@ -15,16 +15,13 @@ class Projectile
     Geometry* _geometry;
     Drawable* _drawable;
     Transformation* _transformation;
-    PhysicObject* _phyObj;
-    Node* _Node;
+    PhysicObject* _phyObj;   
 
     QString path;
 
 
 public:
-    Projectile(PhysicEngine* physicEngine, QVector3D direction);
-
-    Node* getNode();
+    Projectile(PhysicEngine* physicEngine, QMatrix4x4 turretMatrix, Node* rootNode);
 };
 
 #endif // PROJECTILE_H

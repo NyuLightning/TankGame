@@ -101,8 +101,7 @@ void GameLoop::doIt(){
             //QMatrix4x4 combinedmatrix = turretMatrix*barrelMatrix;
             //combinedmatrix.flipCoordinates();
 
-            Projectile* bullet = new Projectile(phyEngine, QVector3D(0,0,-1) * turretMatrix);
-            rootNode->addChild(bullet->getNode());
+            Projectile* bullet = new Projectile(phyEngine, turretMatrix, rootNode);
         }        
     }
     // ///////////////////////////

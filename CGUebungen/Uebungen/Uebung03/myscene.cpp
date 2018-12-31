@@ -44,7 +44,7 @@ Node* initScene1();
 //UITransformation* rot;
 
 ScreenRenderer* playWindow;
-Camera* cam;
+Camera * cam;
 PhysicEngine* v_PhysicEngine;
 
 void addShaderHit(Drawable* d)

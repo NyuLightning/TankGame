@@ -1,15 +1,20 @@
 #include "projectile.h"
 #include "trianglemesh.h"
 
-Projectile::Projectile(PhysicEngine* PhysicEngine, QVector3D direction)
+Projectile::Projectile(PhysicEngine* physicEngine, QMatrix4x4 turretMatrix, Node* rootNode)
 {
-    _projectileSpeed = 50;
     QString path(SRCDIR);
 
-    _phyEngine = PhysicEngine;
+    _projectileSpeed = 30;
+
+
+    _phyEngine = physicEngine;
     _geometry = new TriangleMesh(path + QString("/../Models/bullet.obj"));
     _drawable = new Drawable(_geometry);
     _transformation = new Transformation();
+
+    _transformation->setModelMatrix(turretMatrix);
+    _transformation->translate(0,-0.1f,0);
 
     _phyObj = _phyEngine->createNewPhysicObject(_drawable);
 
@@ -41,11 +46,12 @@ Projectile::Projectile(PhysicEngine* PhysicEngine, QVector3D direction)
     // Das PhysicObject in seiner Engine Registrieren, damit die Simulation starten kann
     _phyObj->registerPhysicObject();
 
-    direction.normalize();
+    QVector3D direction = (QVector3D(0,0,-1) *turretMatrix).normalized();
     _phyObj->setLinearVelocity(direction*_projectileSpeed);
+
+    Node* _transfNode = new Node(_transformation);
+    Node* _Node = new Node(_drawable);
+    rootNode->addChild(_transfNode);
+    _transfNode->addChild(_Node);
 }
 
-Node* Projectile::getNode(){
-    _Node = new Node(_drawable);
-    return _Node;
-}
