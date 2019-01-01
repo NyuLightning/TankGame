@@ -1,8 +1,14 @@
 <RCC>
     <qresource prefix="/">
-        <file>shaders/hello_glsl.vert</file>
-        <file>shaders/hello_glsl.frag</file>
-        <file>shaders/wavemotion.vert</file>
-        <file>shaders/common.vert.inc</file>
+        <file>shader/hello_glsl.vert</file>
+        <file>shader/hello_glsl.frag</file>
+        <file>shader/wavemotion.vert</file>
+        <file>shader/common.vert.inc</file>	
+        <file>shader/PhongFragment.vert</file>
+        <file>shader/PhongFragment.frag</file>
+        <file>shader/common.vert.inc</file>
+        <file>shader/commonlight.vert.inc</file>
+        <file>shader/commonlightmatdefs.inc</file>
+        <file>shader/commonlightmodels.inc</file>
     </qresource>
 </RCC>

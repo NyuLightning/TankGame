@@ -10,7 +10,7 @@
 #include "ui_robot.h"
 #include "trianglemesh.h"
 #include "texture.h"
-//#include "shader.h"
+
 #include "listener.h"
 //#include "audioengine.h"
 //#include "soundsource.h"
@@ -39,6 +39,10 @@
 #include "transformation.h"
 #include "shadermanager.h"
 #include "modeltransformation.h"
+
+#include "shader.h"
+#include "light.h"
+#include "material.h"
 
 Node* initScene1();
 //UITransformation* rot;
@@ -158,7 +162,26 @@ Node* initScene1()
 
     Texture *t;
 
+/*
 
+    Material *m;
+    m = dWorld->GetProperty<Material>();
+    m->setDiffuse(0.4, .5, .2, 1.);
+    m->setAmbient(0.2, .3, .1, 1.);
+    m->setSpecular(0.8, .8, .8, 1.);
+    m->setShininess(8.);
+    dWorld->setShader(new Shader(QString("://shaders/PhongFragment.vert"), QString("://shaders/PhongFragment.frag")));
+
+    Light* theLight = new Light;
+    theLight->setPosition(0.0, 5.0, 10.0, 1.0);
+    theLight->setSpotDirection(0.0, 0.0, -1.0);
+    thelight->setCutOffAngle(180.0);
+    theLight->setDiffuse(0.7, 0.7, 0.7, 1.0);
+    theLight->setSpecular(0.6, 0.6, 0.6, 1.0);
+    theLight->setAmbient(0.6, 0.6, 0.6, 1.0);
+    theLight->turnOn();
+
+*/
     // Shader laden
 
 
@@ -189,7 +212,7 @@ Node* initScene1()
     dTower->setShader(s);
 
     // Beispiel
-    addShaderHit(dBody);
+ //   addShaderHit(dBody);
 
 
     // Nodes anlegen
@@ -227,7 +250,7 @@ Node* initScene1()
 
 
     // Baum aufbauen
-
+ //   root->addChild(theLight);
     root->addChild(bodyRotationNode);
     bodyRotationNode->addChild(dBodyNode);
 
