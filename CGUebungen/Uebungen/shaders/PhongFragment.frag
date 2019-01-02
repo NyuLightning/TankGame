@@ -1,6 +1,6 @@
 #version 330
-#sginclude "://shader/commonlightmatdefs.inc"
-#sginclude "://shader/commonlightmodels.inc"
+#sginclude "/commonlightmatdefs.inc"
+#sginclude "/commonlightmodels.inc"
 
 in vec3 N;
 in vec3 L;

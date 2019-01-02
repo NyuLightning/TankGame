@@ -1,4 +1,4 @@
-#sginclude "://shader/commonlightmatdefs.inc"
+#sginclude "/commonlightmatdefs.inc"
 
 float phongKd(vec3 light, vec3 normal)
 {

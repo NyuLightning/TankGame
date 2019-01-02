@@ -1,5 +1,5 @@
 #version 330
-#sginclude "://shader/commonlight.vert.inc"
+#sginclude "/commonlight.vert.inc"
 
 out vec3 N;
 out vec3 L;

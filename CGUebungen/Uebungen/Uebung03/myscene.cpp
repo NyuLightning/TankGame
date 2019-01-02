@@ -41,8 +41,8 @@
 #include "modeltransformation.h"
 
 #include "shader.h"
-#include "light.h"
-#include "material.h"
+#include "sunlight.h"
+//#include "material.h"
 
 Node* initScene1();
 //UITransformation* rot;
@@ -54,7 +54,7 @@ PhysicEngine* v_PhysicEngine;
 void addShaderHit(Drawable* d)
 {
     // Setze Shader wenn Objekt zerstört
-    ShaderTimed* redWaveformShader = ShaderManager::getShader<ShaderTimed>("/Shader/wavemotion.vert", "/Shader/hello_glsl.frag");
+    ShaderTimed* redWaveformShader = ShaderManager::getShader<ShaderTimed>("/shaders/wavemotion.vert", "/shaders/hello_glsl.frag");
     redWaveformShader->setMsecsPerIteration(600);
     d->setShader(redWaveformShader);
 
@@ -162,36 +162,30 @@ Node* initScene1()
 
     Texture *t;
 
-/*
+    Material* m;
+    m = dWorld->getProperty<Material>();
+    m->setDiffuse(0.4f, .5f, .2f, 1.f);
+    m->setAmbient(0.2f, .3f, .1f, 1.f);
+    m->setSpecular(0.8f, .8f, .8f, 1.f);
+    m->setShininess(8.f);
+    dWorld->setShader(ShaderManager::getShader(QString("/shaders/PhongFragment.vert"), QString("/shaders/PhongFragment.frag")));
 
-    Material *m;
-    m = dWorld->GetProperty<Material>();
-    m->setDiffuse(0.4, .5, .2, 1.);
-    m->setAmbient(0.2, .3, .1, 1.);
-    m->setSpecular(0.8, .8, .8, 1.);
-    m->setShininess(8.);
-    dWorld->setShader(new Shader(QString("://shaders/PhongFragment.vert"), QString("://shaders/PhongFragment.frag")));
-
-    Light* theLight = new Light;
-    theLight->setPosition(0.0, 5.0, 10.0, 1.0);
-    theLight->setSpotDirection(0.0, 0.0, -1.0);
-    thelight->setCutOffAngle(180.0);
-    theLight->setDiffuse(0.7, 0.7, 0.7, 1.0);
-    theLight->setSpecular(0.6, 0.6, 0.6, 1.0);
-    theLight->setAmbient(0.6, 0.6, 0.6, 1.0);
+    // Lichtquelle
+    SunLight* theLight = new SunLight;
+    Node* theLightNode = new Node(theLight);
+    theLight->setDiffuse(0.7f, 0.7f, 0.7f);
+    theLight->setSpecular(0.6f, 0.6f, 0.6f);
+    theLight->setAmbient(0.6f, 0.6f, 0.6f);
     theLight->turnOn();
 
-*/
+
     // Shader laden
-
-
-    Shader* s = ShaderManager::getShader("/Shader/texture.vert","/Shader/texture.frag");
+    Shader* s = ShaderManager::getShader("/shaders/texture.vert","/shaders/texture.frag");
 
 
     // Texturen laden
-
     t = dTower->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/World.png"));
+    t->loadPicture(path + QString("/../Textures/Unbekannt.png"));
 
     t = dBody->getProperty<Texture>();
     t->loadPicture(path + QString("/../Textures/Unbekannt2.png"));
@@ -250,7 +244,20 @@ Node* initScene1()
 
 
     // Baum aufbauen
- //   root->addChild(theLight);
+
+    root->addChild(theLightNode);
+    theLightNode->addChild(bodyRotationNode);
+    bodyRotationNode->addChild(dBodyNode);
+
+    bodyRotationNode->addChild(towerRotationNode);
+    towerRotationNode->addChild(dTowerNode);
+
+    towerRotationNode->addChild(pipeRotationNode);
+    pipeRotationNode->addChild(dPipeNode);
+
+    theLightNode->addChild(worldTranslationNode);
+    worldTranslationNode->addChild(dWorldNode);
+    /*
     root->addChild(bodyRotationNode);
     bodyRotationNode->addChild(dBodyNode);
 
@@ -262,6 +269,7 @@ Node* initScene1()
 
     root->addChild(worldTranslationNode);
     worldTranslationNode->addChild(dWorldNode);
+    */
 
 
 

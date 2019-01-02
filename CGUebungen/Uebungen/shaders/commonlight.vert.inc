@@ -1,8 +1,8 @@
 #sgdefine COMMONLIGHT_VERT_INC //Define setzen um Mehrfache inkludierung auszuschliessen
 
-#sginclude "://shader/common.vert.inc"
-#sginclude "://shader/commonlightmatdefs.inc"
-#sginclude "://shader/commonlightmodels.inc"
+#sginclude "/common.vert.inc"
+#sginclude "/commonlightmatdefs.inc"
+#sginclude "/commonlightmodels.inc"
 
 vec3 eyePosition() {return((mMatrix * vertexPosition)).xyz;}
 vec3 eyeLightPos() {return((mMatrix * lights[0].position).xyz);}

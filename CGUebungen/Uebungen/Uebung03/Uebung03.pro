@@ -31,3 +31,6 @@ HEADERS += \
     gameloop.h \
     cannonball.h \
     projectile.h
+	
+RESOURCES += \
+    MyShaders.qrc
