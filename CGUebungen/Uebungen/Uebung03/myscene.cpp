@@ -143,13 +143,14 @@ Node* initScene1()
     Color* c;
 */
 
-    // Beispielwelt um erstmal überhaupt was zu haben / maximaler Augenkrebs
+    // Welt
     Geometry* gWorld = new TriangleMesh(path + QString("/../Models/world.obj"));
     Drawable* dWorld = new Drawable(gWorld);
     Node *dWorldNode = new Node(dWorld);
     Transformation *posWorld = new Transformation();
     posWorld->translate(0.0,-1.0,0.0);
     Node *worldTranslationNode = new Node(posWorld);
+
     // Panzerteile erzeugen
 
     Geometry* gTower = new TriangleMesh(path + QString("/../Models/turret.obj"));
@@ -194,7 +195,7 @@ Node* initScene1()
     t->loadPicture(path + QString("/../Textures/Unbekannt3.png/"));
 
     t = dWorld->getProperty<Texture>();
-    t->loadPicture(path + QString("/../Textures/Camo.png"));
+    t->loadPicture(path + QString("/../Textures/World_Diffuse.png"));
 
     //Shader fuer Textur setzen
     dWorld->setShader(s);
@@ -206,7 +207,7 @@ Node* initScene1()
     dTower->setShader(s);
 
     // Beispiel
- //   addShaderHit(dBody);
+//    addShaderHit(dWorld);
 
 
     // Nodes anlegen

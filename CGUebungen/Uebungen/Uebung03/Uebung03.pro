@@ -18,7 +18,8 @@ SOURCES += \
     gameloop.cpp \
     cannonball.cpp \
     backup.cpp \
-    projectile.cpp
+    projectile.cpp \
+    enemytank.cpp
 
 FORMS += \
     robot.ui
@@ -30,7 +31,7 @@ HEADERS += \
     tower.h \
     gameloop.h \
     cannonball.h \
-    projectile.h
+    projectile.h \
+    enemytank.h
 	
-RESOURCES += \
-    MyShaders.qrc
+
