@@ -72,6 +72,16 @@ turret_phyObj->registerPhysicObject();
 //QVector3D direction = (QVector3D(0,0,-1) *StartPosMatrix).normalized();
 //_phyObj->setLinearVelocity(direction*_projectileSpeed);
 
+t = chassis_drawable->getProperty<Texture>();
+t->loadPicture(path + QString("/../Textures/Enemy_Diffuse.png"));
+
+t = barrel_drawable->getProperty<Texture>();
+t->loadPicture(path + QString("/../Textures/Enemy_Diffuse.png/"));
+
+t = turret_drawable->getProperty<Texture>();
+t->loadPicture(path + QString("/../Textures/Enemy_Diffuse.png"));
+
+
 Node* chassis_transfNode = new Node(chassis_transformation);
 Node* chassis_Node = new Node(chassis_drawable);
 Node* barrel_transfNode = new Node(barrel_transformation);

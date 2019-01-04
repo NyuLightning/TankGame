@@ -3,6 +3,7 @@
 
 #include <drawable.h>
 #include <transformation.h>
+#include "texture.h"
 
 class EnemyTank
 {
@@ -24,6 +25,8 @@ class EnemyTank
     PhysicObject* turret_phyObj;
 
     QString path;
+
+    Texture* t;
 
 public:
     EnemyTank(PhysicEngine* physicEngine, QMatrix4x4 StartPosMatrix, Node* rootNode);

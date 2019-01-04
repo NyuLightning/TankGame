@@ -9,7 +9,6 @@
 #include <QTime>
 
 
-
 class GameLoop : public IdleObserver
 {
     //schussProSekunde limitierung

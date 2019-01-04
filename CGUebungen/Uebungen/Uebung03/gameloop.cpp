@@ -1,6 +1,5 @@
 #include "gameloop.h"
 
-
 GameLoop::GameLoop(Transformation* body, Transformation* turret,
                    Transformation* barrel, Camera* cam, Node* rootNode, PhysicEngine* phyEngine)
 {
@@ -77,16 +76,6 @@ void GameLoop::doIt(){
         }
     }
 
-    // Vorwärts + Rückw#rts
-    if (keyIn->isKeyPressed('w'))
-    {
-
-    }
-    if (keyIn->isKeyPressed('s'))
-    {
-
-
-    }
     if (keyIn->isKeyPressed(Qt::Key_Space))
     {
         QTime currentTime = QTime::currentTime();
@@ -104,6 +93,9 @@ void GameLoop::doIt(){
             Projectile* bullet = new Projectile(phyEngine, turretMatrix, rootNode);
         }        
     }
+
+
+
     // ///////////////////////////
 
     // modelMatrix enthält position und translation. Position ist vierte Spalte mit skalierung als viertes element.
