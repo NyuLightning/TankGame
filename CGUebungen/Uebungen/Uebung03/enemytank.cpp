@@ -74,6 +74,8 @@ chassis_phyObj->registerPhysicObject();
 
 t = chassis_drawable->getProperty<Texture>();
 t->loadPicture(path + QString("/../Textures/Enemy_Diffuse.png"));
+Shader* s = ShaderManager::getShader("/shaders/texture.vert","/shaders/texture.frag");
+chassis_drawable->setShader(s);
 
 //t = barrel_drawable->getProperty<Texture>();
 //t->loadPicture(path + QString("/../Textures/Enemy_Diffuse.png/"));

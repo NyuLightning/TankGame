@@ -4,6 +4,8 @@
 #include <drawable.h>
 #include <transformation.h>
 #include "texture.h"
+#include "shader.h"
+#include "shadermanager.h"
 
 class EnemyTank
 {
