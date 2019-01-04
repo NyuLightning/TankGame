@@ -82,7 +82,7 @@ void SceneManager::initScenes()
     int v_Slot = PhysicEngineManager::createNewPhysicEngineSlot(PhysicEngineName::BulletPhysicsLibrary);
     v_PhysicEngine = PhysicEngineManager::getPhysicEngineBySlot(v_Slot);
 
-    cam = new Camera();
+    cam = new Camera();   
     RenderingContext* myContext = new RenderingContext(cam);
     unsigned int myContextNr = SceneManager::instance()->addContext(myContext);
     unsigned int myScene = SceneManager::instance()->addScene(initScene1());
@@ -123,6 +123,7 @@ Node* initScene1()
     Node *dWorldNode = new Node(dWorld);
     Transformation *posWorld = new Transformation();
     posWorld->translate(0.0,-1.0,0.0);
+    posWorld->scale(2,2,2);
     Node *worldTranslationNode = new Node(posWorld);
 
     // Panzerteile
@@ -193,11 +194,25 @@ Node* initScene1()
 
     Node* bodyRotationNode = new Node(bodyRotation);
     Node* towerRotationNode = new Node(towerRotation);
-    Node* pipeRotationNode = new Node(pipeRotation);
-
+    Node* pipeRotationNode = new Node(pipeRotation);    
 
     GameLoop* loop = new GameLoop(bodyRotation, towerRotation, pipeRotation, cam, root, v_PhysicEngine);
 
+    //Boden
+    Drawable* v_Plane = new Drawable(new SimplePlane(100));
+    v_Plane->setStaticGeometry(true);
+    Transformation* v_TransformationPlane = new Transformation();
+    Node* transformationPlaneNode = new Node(v_TransformationPlane);
+    v_TransformationPlane->translate(0,-1.2,0);
+    v_TransformationPlane->rotate(-90.f, 1.f, 0.f, 0.f);
+    PhysicObject* v_PlanePhys = v_PhysicEngine->createNewPhysicObject(v_Plane);
+    PhysicObjectConstructionInfo* v_Constrinf = new PhysicObjectConstructionInfo();
+    v_Constrinf->setCollisionHull(CollisionHull::BoxAABB); // Automatische generierung einer Box aus den Vertexpunkten
+    v_PlanePhys->setConstructionInfo(v_Constrinf);
+    v_PlanePhys->registerPhysicObject();
+    transformationPlaneNode->addChild(new Node(v_Plane));
+
+    root->addChild(transformationPlaneNode);
 
     // Baum aufbauen
     root->addChild(theLightNode);

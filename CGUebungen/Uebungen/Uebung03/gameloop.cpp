@@ -1,4 +1,5 @@
 #include "gameloop.h"
+#include <QRandomGenerator>
 
 GameLoop::GameLoop(Transformation* body, Transformation* turret,
                    Transformation* barrel, Camera* cam, Node* rootNode, PhysicEngine* phyEngine)
@@ -6,6 +7,8 @@ GameLoop::GameLoop(Transformation* body, Transformation* turret,
     //nicht direkt schießen können, da buggy
     lastFiredTime = QTime::currentTime();
     bool hasFired = true;
+
+    enemySpawned = QTime::currentTime();
 
     //Panzer Transformations referenzen im GameLoop speichern
     this->chassis = body;
@@ -37,6 +40,15 @@ void GameLoop::doIt(){
     // Keybord Input, kann mehrere Inputs gleichzeitig verarbeiten, daher keine 'if else' oder switch verwenden!
     KeyboardInput* keyIn = InputRegistry::getInstance().getKeyboardInput();
 
+
+    if (keyIn->isKeyPressed('w'))
+    {
+        chassis->translate(0.0f, 0.0f,0.003f);
+    }
+    if (keyIn->isKeyPressed('s'))
+    {
+          chassis->translate(0.0f, 0.0f,-0.003f);
+    }
     if (keyIn->isKeyPressed('a'))
     {      
         chassis->rotate(0.1f*chassisSensitivity, 0.0f, 1.0f,0.0f);
@@ -84,13 +96,14 @@ void GameLoop::doIt(){
             hasFired = true;
             lastFiredTime = QTime::currentTime();
 
-            QMatrix4x4 turretMatrix = turret->getModelMatrix();
+            QMatrix4x4 turretMatrix = turret->getModelMatrix();            
+            QMatrix4x4 chassisMatrix = chassis->getModelMatrix();
             turretMatrix.flipCoordinates();
-            //QMatrix4x4 barrelMatrix = barrel->getModelMatrix();
-            //QMatrix4x4 combinedmatrix = turretMatrix*barrelMatrix;
-            //combinedmatrix.flipCoordinates();
 
-            Projectile* bullet = new Projectile(phyEngine, turretMatrix, rootNode);
+            QMatrix4x4 ma = chassisMatrix * turretMatrix;
+
+
+            Projectile* bullet = new Projectile(phyEngine, ma, rootNode);
         }        
     }
 
@@ -99,29 +112,20 @@ void GameLoop::doIt(){
     // ///////////////////////////
 
     // modelMatrix enthält position und translation. Position ist vierte Spalte mit skalierung als viertes element.
-    QMatrix4x4 posMatrix = turret->getModelMatrix();
+    QMatrix4x4 posMatrix = chassis->getModelMatrix();
     QVector3D pos = posMatrix.column(3).toVector3DAffine(); //remove "Affine" if scaling makes trouble
-
     cam->setEyePosition(pos);
 
+    if(QTime::currentTime() > enemySpawned.addSecs(5)){
+        enemySpawned = QTime::currentTime();
+        QMatrix4x4 startPos = chassis->getModelMatrix();
 
-    //turret Rotation an Kamera anpassen,
-    //geht nicht, da MouseContollableCamera auch über keyboard gesteuert werden kann
-//    QVector3D forward = cam->getDir().normalized();
-//    QVector3D up = QVector3D(-forward.x()*forward.y(),
-//                                (forward.x()*forward.x())+(forward.z()*forward.z()),
-//                                -forward.y()*forward.z());
-//    QVector3D right = QVector3D::crossProduct(up,forward);
-//    up = up.normalized();
-//    right = right.normalized();
+        int x = QRandomGenerator::global()->bounded(-20,20);
+        int z = QRandomGenerator::global()->bounded(-20,20);
+        startPos.translate(x,0,z);
 
-//    QMatrix4x4 CameraRotationMatrix;1
-//    CameraRotationMatrix.setColumn(0,QVector4D(right,1));
-//    CameraRotationMatrix.setColumn(1,QVector4D(up,1));
-//    CameraRotationMatrix.setColumn(2,QVector4D(forward,1));
-//    CameraRotationMatrix.setColumn(3,QVector4D(pos,1));
-
-    //turret->setModelMatrix(CameraRotationMatrix);
+        EnemyTank* enemy = new EnemyTank(phyEngine, startPos, rootNode);
+    }
 
 }
 void GameLoop::SetSensitivity(float chassisS, float turretS, float barrelS){

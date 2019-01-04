@@ -7,7 +7,7 @@
 
 
 class Projectile
-{
+{    
 
     float _projectileSpeed;
 
